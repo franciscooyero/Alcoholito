@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>alcoholito · ¿tu remedio se lleva bien con el alcohol?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F2E7;
+    --surface:#FFFDF8;
+    --ink:#23201A;
+    --muted:#6E6656;
+    --amber:#E39A2B;
+    --amber-deep:#B9761A;
+    --border:#E7DEC9;
+    --border-strong:#DBCFB2;
+
+    --rojo:#C43D2B;   --rojo-bg:#FBEBE7;
+    --naranja:#D9761F;--naranja-bg:#FBEEDF;
+    --amarillo:#C79A16;--amarillo-bg:#FBF4DA;
+    --verde:#3E8E63;  --verde-bg:#E7F2E9;
+    --gris:#6E6656;   --gris-bg:#F1ECE0;
+
+    --shadow:0 1px 2px rgba(60,45,20,.05), 0 8px 24px rgba(60,45,20,.06);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 500px at 50% -200px, #FBEFD4 0%, transparent 60%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:32px 20px 64px;}
+
+  /* ---------- Header ---------- */
+  header{text-align:center;padding-top:12px;}
+  .brand{
+    display:inline-flex;align-items:baseline;gap:.34em;
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-weight:800;font-size:clamp(38px,10vw,60px);
+    letter-spacing:-.03em;line-height:1;color:var(--ink);
+  }
+  .brand .glass{position:relative;top:.02em;display:inline-block;}
+  .brand em{color:var(--amber-deep);font-style:normal;}
+  .tag{
+    margin:14px auto 0;max-width:30ch;
+    font-size:clamp(16px,4.4vw,19px);color:var(--muted);font-weight:500;
+  }
+
+  /* ---------- Search ---------- */
+  .search{position:relative;margin:30px 0 8px;}
+  .search svg{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:var(--amber-deep);pointer-events:none;}
+  #q{
+    width:100%;border:1.5px solid var(--border-strong);background:var(--surface);
+    border-radius:999px;padding:18px 22px 18px 54px;font-size:18px;color:var(--ink);
+    font-family:inherit;box-shadow:var(--shadow);transition:border-color .18s, box-shadow .18s;
+  }
+  #q::placeholder{color:#A79C84;}
+  #q:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 4px rgba(227,154,43,.18), var(--shadow);}
+  .clearbtn{
+    position:absolute;right:12px;top:50%;transform:translateY(-50%);
+    border:none;background:#EFE7D4;color:var(--muted);width:34px;height:34px;border-radius:50%;
+    font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1;
+  }
+  .clearbtn:hover{background:#E4D9BF;}
+  .clearbtn.show{display:flex;}
+
+  .hint{text-align:center;color:var(--muted);font-size:13.5px;margin-top:12px;}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px;}
+  .chip{
+    border:1px solid var(--border-strong);background:var(--surface);color:var(--ink);
+    border-radius:999px;padding:8px 14px;font-size:14px;font-weight:500;cursor:pointer;
+    font-family:inherit;transition:transform .1s, border-color .15s, background .15s;
+  }
+  .chip:hover{border-color:var(--amber);background:#FFF9EC;}
+  .chip:active{transform:scale(.97);}
+
+  /* ---------- Results ---------- */
+  #results{margin-top:26px;display:flex;flex-direction:column;gap:14px;}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px 20px 18px;border-left:6px solid var(--gris);
+    animation:rise .28s cubic-bezier(.2,.7,.3,1) both;
+  }
+  @keyframes rise{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+  .card.grave{border-left-color:var(--rojo);}
+  .card.moderado{border-left-color:var(--naranja);}
+  .card.leve{border-left-color:var(--amarillo);}
+  .card.seguro{border-left-color:var(--verde);}
+
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;}
+  .drug{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:22px;letter-spacing:-.02em;line-height:1.15;}
+  .grupo{color:var(--muted);font-size:13.5px;margin-top:2px;}
+  .alias{color:#9A8F77;font-size:12.5px;margin-top:3px;font-style:italic;}
+
+  .pill{
+    display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+    border-radius:999px;padding:7px 14px;font-weight:700;font-size:13px;letter-spacing:.02em;
+  }
+  .pill .dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 0 3px rgba(0,0,0,.04);}
+  .pill.grave{background:var(--rojo-bg);color:var(--rojo);} .pill.grave .dot{background:var(--rojo);}
+  .pill.moderado{background:var(--naranja-bg);color:var(--naranja);} .pill.moderado .dot{background:var(--naranja);}
+  .pill.leve{background:var(--amarillo-bg);color:var(--amarillo);} .pill.leve .dot{background:var(--amarillo);}
+  .pill.seguro{background:var(--verde-bg);color:var(--verde);} .pill.seguro .dot{background:var(--verde);}
+
+  .tipo{margin-top:14px;font-weight:600;font-size:15px;}
+  .row{display:flex;gap:9px;margin-top:12px;font-size:14.5px;}
+  .row .k{flex:0 0 auto;color:var(--amber-deep);font-weight:700;}
+  .row .v{color:#3D372C;}
+  .row .v.mecanismo{color:var(--muted);}
+
+  /* ---------- Empty / not found ---------- */
+  .msg{
+    background:var(--surface);border:1px dashed var(--border-strong);border-radius:var(--radius);
+    padding:26px 22px;text-align:center;color:var(--muted);
+  }
+  .msg strong{color:var(--ink);}
+  .msg .big{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;color:var(--ink);font-weight:700;margin-bottom:6px;}
+
+  .count{font-size:13px;color:var(--muted);margin:2px 2px 4px;}
+
+  /* ---------- Legend + footer ---------- */
+  .legend{
+    margin-top:34px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+    padding:18px 20px;box-shadow:var(--shadow);
+  }
+  .legend h3{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;margin:0 0 12px;letter-spacing:-.01em;}
+  .legend .lg{display:flex;align-items:center;gap:10px;font-size:14px;padding:6px 0;}
+  .legend .lg .dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;}
+  .legend .lg b{font-weight:700;}
+  .legend .lg span{color:var(--muted);}
+
+  .disclaimer{
+    margin-top:20px;font-size:12.5px;color:var(--muted);line-height:1.6;text-align:center;
+    border-top:1px solid var(--border);padding-top:18px;
+  }
+  .disclaimer strong{color:#8A5A12;}
+  footer{margin-top:22px;text-align:center;font-size:12px;color:#A79C84;}
+
+  @media (prefers-reduced-motion: reduce){
+    .card{animation:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="glass" aria-hidden="true">🥃</span><span>alcohol<em>ito</em></span></div>
+    <p class="tag">¿El remedio que estás tomando se lleva bien con el alcohol?</p>
+  </header>
+
+  <div class="search">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="Escribí el nombre del remedio…" aria-label="Buscar medicamento">
+    <button class="clearbtn" id="clear" aria-label="Borrar">×</button>
+  </div>
+  <p class="hint">Podés buscar por nombre genérico (metronidazol) o comercial (flagyl).</p>
+
+  <div class="chips" id="chips"></div>
+
+  <div id="results"></div>
+
+  <div class="legend">
+    <h3>Cómo leer el semáforo</h3>
+    <div class="lg"><span class="dot" style="background:var(--rojo)"></span><b>Evitar</b>&nbsp;<span>— interacción grave, no combinar.</span></div>
+    <div class="lg"><span class="dot" style="background:var(--naranja)"></span><b>Precaución</b>&nbsp;<span>— riesgo real, mejor evitar o consultar.</span></div>
+    <div class="lg"><span class="dot" style="background:var(--amarillo)"></span><b>Cuidado leve</b>&nbsp;<span>— efecto menor, con moderación.</span></div>
+    <div class="lg"><span class="dot" style="background:var(--verde)"></span><b>Sin interacción relevante</b>&nbsp;<span>— igual, con moderación siempre.</span></div>
+  </div>
+
+  <p class="disclaimer">
+    <strong>Importante:</strong> alcoholito es una herramienta orientativa de información general. No reemplaza el consejo de tu médico/a ni de tu farmacéutico/a. Que un remedio <em>no aparezca</em> en la lista no significa que sea seguro combinarlo con alcohol. Ante la duda, consultá a un profesional.
+  </p>
+  <p class="disclaimer" style="border-top:none;padding-top:0;margin-top:12px;color:#8A5A12;font-weight:600;">
+    Nunca es recomendable mezclar medicación con alcohol.<br>
+    Siempre que tomes, hacelo con moderación; y si tomás, no manejes.
+  </p>
+  <footer>Hecho con 🧡 para tomar decisiones más informadas.</footer>
+</div>
+
+<script>
+/* ================== BASE DE DATOS ================== */
+const DB = [
+  /* ---- EFECTO DISULFIRAM / ANTAB\u00daS (grave) ---- */
+  {n:"Metronidazol",g:"Antibi\u00f3tico / antiparasitario (nitroimidazol)",a:["flagyl","metronidazol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Bloquea la aldeh\u00eddo deshidrogenasa: se acumula acetaldeh\u00eddo.",que:"Evitar el alcohol durante el tratamiento y hasta 3 d\u00edas despu\u00e9s de terminarlo. Provoca n\u00e1useas, v\u00f3mitos, rubor, taquicardia y dolor de cabeza intensos."},
+  {n:"Tinidazol",g:"Antiparasitario (nitroimidazol)",a:["fasigyn","tinidazol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Acumulaci\u00f3n de acetaldeh\u00eddo, igual que el metronidazol.",que:"Nada de alcohol durante el tratamiento y hasta 3 d\u00edas despu\u00e9s."},
+  {n:"Ornidazol",g:"Antiparasitario (nitroimidazol)",a:["ornidazol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Interfiere en el metabolismo del alcohol.",que:"Evitar alcohol durante y varios d\u00edas despu\u00e9s del tratamiento."},
+  {n:"Secnidazol",g:"Antiparasitario (nitroimidazol)",a:["secnidazol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Acumulaci\u00f3n de acetaldeh\u00eddo.",que:"Evitar alcohol durante y d\u00edas despu\u00e9s."},
+  {n:"Disulfiram",g:"Tratamiento del alcoholismo",a:["antabus","disulfiram"],nivel:"grave",tipo:"Reacci\u00f3n disulfiram (es el f\u00e1rmaco que la produce)",mec:"Inhibe directamente la aldeh\u00eddo deshidrogenasa.",que:"Absolutamente nada de alcohol (ni jarabes, enjuagues o comidas con alcohol). La reacci\u00f3n puede ser severa y peligrosa."},
+  {n:"Cefalosporinas (algunas)",g:"Antibi\u00f3ticos (cefoperazona, cefamandol, cefotet\u00e1n)",a:["cefoperazona","cefamandol","cefotetan","cefmetazol","ceftriaxona"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Las que tienen cadena lateral NMTT inhiben la aldeh\u00eddo deshidrogenasa.",que:"Evitar alcohol durante el tratamiento y hasta 3 d\u00edas despu\u00e9s."},
+  {n:"Griseofulvina",g:"Antif\u00fangico",a:["griseofulvina"],nivel:"grave",tipo:"Efecto disulfiram + potencia efectos del alcohol",mec:"Reacci\u00f3n tipo antab\u00fas y aumento de la sensibilidad al alcohol.",que:"Evitar alcohol durante el tratamiento."},
+  {n:"Ketoconazol",g:"Antif\u00fangico (oral)",a:["ketoconazol"],nivel:"grave",tipo:"Efecto disulfiram + hepatotoxicidad",mec:"Reacci\u00f3n tipo antab\u00fas y suma de da\u00f1o hep\u00e1tico.",que:"Evitar alcohol; ambos son hepatot\u00f3xicos."},
+  {n:"Cloranfenicol",g:"Antibi\u00f3tico",a:["cloranfenicol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Inhibe el metabolismo del acetaldeh\u00eddo.",que:"Evitar alcohol durante el tratamiento."},
+  {n:"Clorpropamida",g:"Antidiab\u00e9tico (sulfonilurea)",a:["clorpropamida"],nivel:"grave",tipo:"Efecto disulfiram + hipoglucemia",mec:"Reacci\u00f3n tipo antab\u00fas (rubor) y riesgo de hipoglucemia.",que:"Evitar alcohol: da rubor facial y puede bajar mucho el az\u00facar."},
+  {n:"Furazolidona",g:"Antibi\u00f3tico / antiparasitario",a:["furazolidona"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Inhibe el metabolismo del alcohol.",que:"Evitar alcohol durante el tratamiento y d\u00edas despu\u00e9s."},
+
+  /* ---- DEPRESI\u00d3N DEL SNC (grave) ---- */
+  {n:"Diazepam",g:"Benzodiacepina (ansiol\u00edtico)",a:["valium","diazepam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Ambos deprimen el SNC v\u00eda GABA: se potencian.",que:"No combinar. Riesgo de somnolencia extrema, ca\u00eddas y depresi\u00f3n respiratoria."},
+  {n:"Clonazepam",g:"Benzodiacepina",a:["rivotril","clonazepam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Potenciaci\u00f3n de la sedaci\u00f3n y depresi\u00f3n respiratoria.",que:"No combinar con alcohol."},
+  {n:"Alprazolam",g:"Benzodiacepina (ansiol\u00edtico)",a:["alplax","xanax","alprazolam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Suma de efectos depresores.",que:"No combinar: sedaci\u00f3n intensa y riesgo de accidentes."},
+  {n:"Lorazepam",g:"Benzodiacepina",a:["trapax","lorazepam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Potenciaci\u00f3n de la sedaci\u00f3n.",que:"Evitar alcohol."},
+  {n:"Bromazepam",g:"Benzodiacepina",a:["lexotanil","bromazepam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Suma de efectos sedantes.",que:"Evitar alcohol."},
+  {n:"Midazolam",g:"Benzodiacepina (sedante)",a:["dormicum","midazolam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Depresi\u00f3n respiratoria potenciada.",que:"No combinar."},
+  {n:"Zolpidem",g:"Hipn\u00f3tico (Z-drug)",a:["stilnox","somit","zolpidem"],nivel:"grave",tipo:"Depresi\u00f3n del SNC + conductas del sue\u00f1o",mec:"Sedaci\u00f3n potenciada y mayor riesgo de sonambulismo/amnesia.",que:"No combinar con alcohol."},
+  {n:"Zopiclona",g:"Hipn\u00f3tico (Z-drug)",a:["zopiclona"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Potenciaci\u00f3n de la sedaci\u00f3n.",que:"Evitar alcohol."},
+  {n:"Fenobarbital",g:"Barbit\u00farico (anticonvulsivante)",a:["luminal","fenobarbital"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Depresi\u00f3n respiratoria potenciada, margen de seguridad estrecho.",que:"No combinar bajo ning\u00fan concepto."},
+  {n:"Tramadol",g:"Opioide (analg\u00e9sico)",a:["calmador","tramal","tramadol"],nivel:"grave",tipo:"Depresi\u00f3n del SNC + convulsiones",mec:"Suma de sedaci\u00f3n, depresi\u00f3n respiratoria y baja el umbral convulsivo.",que:"Evitar alcohol."},
+  {n:"Code\u00edna",g:"Opioide (analg\u00e9sico / antitusivo)",a:["codeina"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Depresi\u00f3n respiratoria potenciada.",que:"No combinar."},
+  {n:"Morfina",g:"Opioide (analg\u00e9sico)",a:["morfina"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Riesgo alto de depresi\u00f3n respiratoria.",que:"No combinar con alcohol."},
+  {n:"Oxicodona",g:"Opioide (analg\u00e9sico)",a:["oxicontin","oxicodona"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Depresi\u00f3n respiratoria potenciada.",que:"No combinar."},
+  {n:"Metadona",g:"Opioide",a:["metadona"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Depresi\u00f3n respiratoria y riesgo card\u00edaco.",que:"Evitar alcohol."},
+  {n:"Dextropropoxifeno",g:"Opioide (analg\u00e9sico)",a:["klosidol","dextropropoxifeno"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Depresi\u00f3n respiratoria potenciada.",que:"No combinar."},
+  {n:"Pregabalina",g:"Anticonvulsivante / dolor neurop\u00e1tico",a:["lyrica","pregabalina"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n y mareo potenciados.",que:"Evitar alcohol."},
+  {n:"Gabapentina",g:"Anticonvulsivante / dolor neurop\u00e1tico",a:["neurontin","gabapentin","gabapentina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Suma de sedaci\u00f3n y mareo.",que:"Evitar o limitar mucho el alcohol."},
+  {n:"Quetiapina",g:"Antipsic\u00f3tico",a:["seroquel","quetiapina"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n fuerte potenciada.",que:"Evitar alcohol."},
+  {n:"Olanzapina",g:"Antipsic\u00f3tico",a:["zyprexa","olanzapina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n e hipotensi\u00f3n potenciadas.",que:"Evitar alcohol."},
+  {n:"Clozapina",g:"Antipsic\u00f3tico",a:["clozapina"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n y riesgo respiratorio potenciados.",que:"Evitar alcohol."},
+  {n:"Haloperidol",g:"Antipsic\u00f3tico",a:["halopidol","haloperidol"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n potenciada.",que:"Evitar alcohol."},
+  {n:"Risperidona",g:"Antipsic\u00f3tico",a:["risperdal","risperidona"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n e hipotensi\u00f3n potenciadas.",que:"Evitar alcohol."},
+  {n:"Baclofeno",g:"Relajante muscular",a:["lioresal","baclofeno"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n potenciada.",que:"Evitar alcohol."},
+  {n:"Ciclobenzaprina",g:"Relajante muscular",a:["ciclobenzaprina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n potenciada.",que:"Evitar alcohol."},
+  {n:"Pridinol",g:"Relajante muscular",a:["pridinol","dorixina relax"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n y efectos anticolin\u00e9rgicos potenciados.",que:"Evitar o limitar el alcohol."},
+
+  /* ---- ANTIHISTAM\u00cdNICOS 1a gen ---- */
+  {n:"Difenhidramina",g:"Antihistam\u00ednico (1\u00aa generaci\u00f3n)",a:["benadryl","difenhidramina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n anticolin\u00e9rgica potenciada.",que:"Evitar alcohol; da mucho sue\u00f1o."},
+  {n:"Clorfeniramina",g:"Antihistam\u00ednico (1\u00aa generaci\u00f3n)",a:["clorfeniramina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n potenciada.",que:"Evitar alcohol."},
+  {n:"Hidroxizina",g:"Antihistam\u00ednico / ansiol\u00edtico",a:["ataraxone","hidroxizina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n potenciada.",que:"Evitar alcohol."},
+  {n:"Prometazina",g:"Antihistam\u00ednico (1\u00aa generaci\u00f3n)",a:["fenergan","prometazina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n fuerte potenciada.",que:"Evitar alcohol."},
+
+  /* ---- ANTIDEPRESIVOS ---- */
+  {n:"Amitriptilina",g:"Antidepresivo tric\u00edclico",a:["tryptanol","uxen","amitriptilina"],nivel:"moderado",tipo:"Depresi\u00f3n del SNC + efectos anticolin\u00e9rgicos",mec:"Sedaci\u00f3n potenciada.",que:"Evitar o limitar el alcohol."},
+  {n:"Mirtazapina",g:"Antidepresivo",a:["mirtazapina"],nivel:"moderado",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Sedaci\u00f3n marcada potenciada.",que:"Evitar alcohol."},
+  {n:"Trazodona",g:"Antidepresivo / hipn\u00f3tico",a:["taxagon","trazodona"],nivel:"moderado",tipo:"Depresi\u00f3n del SNC + hipotensi\u00f3n",mec:"Sedaci\u00f3n e hipotensi\u00f3n potenciadas.",que:"Evitar alcohol."},
+  {n:"Sertralina",g:"Antidepresivo (ISRS)",a:["zoloft","sertralina"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Puede sumar somnolencia; el alcohol empeora la depresi\u00f3n y ansiedad.",que:"Se puede tomar con moderaci\u00f3n, pero mejor evitar excesos."},
+  {n:"Escitalopram",g:"Antidepresivo (ISRS)",a:["lexapro","escitalopram"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Suma leve de somnolencia; el alcohol contrarresta el efecto.",que:"Moderaci\u00f3n; evitar consumo importante."},
+  {n:"Fluoxetina",g:"Antidepresivo (ISRS)",a:["prozac","foxetin","fluoxetina"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Efecto aditivo leve.",que:"Moderaci\u00f3n."},
+  {n:"Paroxetina",g:"Antidepresivo (ISRS)",a:["aropax","paroxetina"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Efecto aditivo leve.",que:"Moderaci\u00f3n."},
+  {n:"Venlafaxina",g:"Antidepresivo (IRSN)",a:["elafax","sesaren","venlafaxina"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Suma leve de somnolencia.",que:"Moderaci\u00f3n."},
+  {n:"Duloxetina",g:"Antidepresivo (IRSN)",a:["cymbalta","duloxetina"],nivel:"moderado",tipo:"Hepatotoxicidad + depresi\u00f3n del SNC",mec:"Riesgo hep\u00e1tico aumentado con consumo importante.",que:"Evitar el consumo importante de alcohol."},
+
+  /* ---- HEPATOTOXICIDAD ---- */
+  {n:"Paracetamol",g:"Analg\u00e9sico / antit\u00e9rmico (acetaminofeno)",a:["paracetamol","acetaminofeno","tafirol","termofren"],nivel:"moderado",tipo:"Hepatotoxicidad",mec:"El alcohol induce enzimas que generan un metabolito t\u00f3xico para el h\u00edgado.",que:"A dosis normales y consumo ocasional suele ser seguro, pero en bebedores frecuentes aumenta mucho el riesgo hep\u00e1tico. No superar la dosis indicada."},
+  {n:"Metotrexato",g:"Inmunosupresor / quimioter\u00e1pico",a:["metotrexato","methotrexate"],nivel:"grave",tipo:"Hepatotoxicidad",mec:"Ambos da\u00f1an el h\u00edgado y provocan fibrosis.",que:"Evitar el alcohol durante el tratamiento."},
+  {n:"Isoniazida",g:"Antituberculoso",a:["isoniazida"],nivel:"grave",tipo:"Hepatotoxicidad",mec:"Suma de da\u00f1o hep\u00e1tico; el alcohol aumenta el riesgo de hepatitis.",que:"Evitar alcohol durante el tratamiento."},
+  {n:"Leflunomida",g:"Inmunosupresor (artritis)",a:["arava","leflunomida"],nivel:"grave",tipo:"Hepatotoxicidad",mec:"Da\u00f1o hep\u00e1tico potenciado.",que:"Evitar alcohol."},
+  {n:"Amiodarona",g:"Antiarr\u00edtmico",a:["atlansil","amiodarona"],nivel:"moderado",tipo:"Hepatotoxicidad",mec:"Ambos son hepatot\u00f3xicos.",que:"Limitar mucho el alcohol."},
+  {n:"Fluconazol",g:"Antif\u00fangico",a:["diflucan","fluconazol"],nivel:"moderado",tipo:"Hepatotoxicidad",mec:"Suma de da\u00f1o hep\u00e1tico (no da efecto antab\u00fas, a diferencia de otros antif\u00fangicos).",que:"Evitar el consumo importante de alcohol durante el tratamiento."},
+  {n:"Atorvastatina",g:"Estatina (colesterol)",a:["lipitor","atorvastatina"],nivel:"leve",tipo:"Hepatotoxicidad (con consumo importante)",mec:"El consumo alto de alcohol suma da\u00f1o hep\u00e1tico.",que:"El consumo moderado suele tolerarse; evitar excesos, sobre todo si hay problemas de h\u00edgado."},
+  {n:"Rosuvastatina",g:"Estatina (colesterol)",a:["crestor","rosuvastatina"],nivel:"leve",tipo:"Hepatotoxicidad (con consumo importante)",mec:"El alcohol excesivo suma da\u00f1o hep\u00e1tico.",que:"Moderaci\u00f3n; evitar excesos."},
+
+  /* ---- SANGRADO DIGESTIVO / AINEs ---- */
+  {n:"Ibuprofeno",g:"Antiinflamatorio (AINE)",a:["actron","ibupirac","ibuprofeno"],nivel:"moderado",tipo:"Sangrado digestivo / gastritis",mec:"Ambos irritan la mucosa g\u00e1strica y aumentan el riesgo de \u00falcera y sangrado.",que:"Evitar combinarlos, sobre todo con el est\u00f3mago vac\u00edo."},
+  {n:"Diclofenac",g:"Antiinflamatorio (AINE)",a:["voltaren","diclofenac gador","diclofenac"],nivel:"moderado",tipo:"Sangrado digestivo / gastritis",mec:"Mayor riesgo de \u00falcera y sangrado g\u00e1strico.",que:"Evitar la combinaci\u00f3n."},
+  {n:"Naproxeno",g:"Antiinflamatorio (AINE)",a:["xenar","naprux","naproxeno"],nivel:"moderado",tipo:"Sangrado digestivo / gastritis",mec:"Irritaci\u00f3n g\u00e1strica potenciada.",que:"Evitar la combinaci\u00f3n."},
+  {n:"Ketorolac",g:"Antiinflamatorio (AINE)",a:["dolten","toradol","ketorolac"],nivel:"moderado",tipo:"Sangrado digestivo / gastritis",mec:"Riesgo alto de sangrado g\u00e1strico.",que:"Evitar la combinaci\u00f3n."},
+  {n:"Meloxicam",g:"Antiinflamatorio (AINE)",a:["movalis","meloxicam"],nivel:"moderado",tipo:"Sangrado digestivo / gastritis",mec:"Irritaci\u00f3n g\u00e1strica potenciada.",que:"Evitar la combinaci\u00f3n."},
+  {n:"Aspirina",g:"Antiagregante / AINE (AAS)",a:["aspirina","bayaspirina","aas","acido acetilsalicilico"],nivel:"moderado",tipo:"Sangrado digestivo / gastritis",mec:"Ambos aumentan el riesgo de sangrado g\u00e1strico.",que:"Evitar combinar, especialmente en dosis altas o con el est\u00f3mago vac\u00edo."},
+
+  /* ---- ANTICOAGULANTES / ANTIAGREGANTES ---- */
+  {n:"Warfarina",g:"Anticoagulante",a:["warfarina"],nivel:"grave",tipo:"Alteraci\u00f3n de la coagulaci\u00f3n",mec:"El alcohol agudo aumenta el efecto (m\u00e1s sangrado); el cr\u00f3nico lo disminuye (m\u00e1s co\u00e1gulos).",que:"Consumo estable y m\u00ednimo: las borracheras descontrolan el INR. En Argentina, el anticoagulante de este tipo m\u00e1s usado es el acenocumarol (Sintrom)."},
+  {n:"Acenocumarol",g:"Anticoagulante (dicumar\u00ednico)",a:["acenocumarol","sintrom"],nivel:"grave",tipo:"Alteraci\u00f3n de la coagulaci\u00f3n",mec:"El alcohol desestabiliza el efecto anticoagulante.",que:"Evitar consumo irregular; riesgo de sangrado o trombosis."},
+  {n:"Rivaroxab\u00e1n",g:"Anticoagulante (DOAC)",a:["rivaroxaban","xarelto"],nivel:"moderado",tipo:"Riesgo de sangrado",mec:"El alcohol puede sumar riesgo de sangrado.",que:"Limitar el alcohol; evitar excesos."},
+  {n:"Apixab\u00e1n",g:"Anticoagulante (DOAC)",a:["apixaban","eliquis"],nivel:"moderado",tipo:"Riesgo de sangrado",mec:"Suma de riesgo de sangrado.",que:"Limitar el alcohol."},
+  {n:"Dabigatr\u00e1n",g:"Anticoagulante (DOAC)",a:["dabigatran","pradaxa"],nivel:"moderado",tipo:"Riesgo de sangrado / gastritis",mec:"Irritaci\u00f3n g\u00e1strica y riesgo de sangrado.",que:"Limitar el alcohol."},
+  {n:"Clopidogrel",g:"Antiagregante plaquetario",a:["plavix","clopidogrel"],nivel:"moderado",tipo:"Riesgo de sangrado digestivo",mec:"Suma el riesgo de sangrado g\u00e1strico.",que:"Limitar el alcohol; evitar excesos."},
+  {n:"Enoxaparina",g:"Anticoagulante (heparina de bajo peso)",a:["clexane","enoxaparina"],nivel:"moderado",tipo:"Riesgo de sangrado",mec:"El alcohol puede sumar riesgo de sangrado.",que:"Limitar el alcohol."},
+
+  /* ---- DIABETES ---- */
+  {n:"Insulina",g:"Antidiab\u00e9tico inyectable",a:["insulina"],nivel:"moderado",tipo:"Hipoglucemia",mec:"El alcohol bloquea la producci\u00f3n de glucosa en el h\u00edgado.",que:"Riesgo de hipoglucemia severa (incluso horas despu\u00e9s). No tomar en ayunas; comer algo si se consume."},
+  {n:"Insulina glargina",g:"Insulina basal (an\u00e1logo lento)",a:["lantus","glargina"],nivel:"moderado",tipo:"Hipoglucemia",mec:"El alcohol frena la producci\u00f3n de glucosa: riesgo de hipoglucemia tard\u00eda.",que:"Cuidado con la hipoglucemia nocturna; no tomar en ayunas."},
+  {n:"Insulina lispro",g:"Insulina r\u00e1pida (an\u00e1logo)",a:["humalog","lispro"],nivel:"moderado",tipo:"Hipoglucemia",mec:"Suma el riesgo de hipoglucemia.",que:"Comer si se consume alcohol; controlar la glucemia."},
+  {n:"Insulina asp\u00e1rtica",g:"Insulina r\u00e1pida (an\u00e1logo)",a:["novorapid","aspartica"],nivel:"moderado",tipo:"Hipoglucemia",mec:"Suma el riesgo de hipoglucemia.",que:"Comer si se consume alcohol; controlar la glucemia."},
+  {n:"Glibenclamida",g:"Antidiab\u00e9tico (sulfonilurea)",a:["daonil","glibenclamida"],nivel:"moderado",tipo:"Hipoglucemia",mec:"El alcohol potencia la baja de az\u00facar.",que:"Riesgo de hipoglucemia; evitar tomar en ayunas."},
+  {n:"Glimepirida",g:"Antidiab\u00e9tico (sulfonilurea)",a:["glemaz","glimepirida"],nivel:"moderado",tipo:"Hipoglucemia",mec:"Potenciaci\u00f3n de la hipoglucemia.",que:"Precauci\u00f3n; no en ayunas."},
+  {n:"Gliclazida",g:"Antidiab\u00e9tico (sulfonilurea)",a:["diamicron","gliclazida","glicazida"],nivel:"moderado",tipo:"Hipoglucemia",mec:"Potenciaci\u00f3n de la hipoglucemia.",que:"Precauci\u00f3n; no en ayunas."},
+  {n:"Metformina",g:"Antidiab\u00e9tico (biguanida)",a:["glucophage","dbi","metformina"],nivel:"moderado",tipo:"Acidosis l\u00e1ctica + hipoglucemia",mec:"El alcohol aumenta el riesgo de acidosis l\u00e1ctica (raro pero grave).",que:"Evitar el consumo importante o agudo de alcohol."},
+
+  /* ---- CARDIO / OTROS ---- */
+  {n:"Dinitrato de isosorbide",g:"Vasodilatador (nitrato)",a:["isordil","isosorbide","dinitrato de isosorbide","mononitrato"],nivel:"moderado",tipo:"Hipotensi\u00f3n",mec:"Ambos dilatan los vasos: la presi\u00f3n puede bajar demasiado.",que:"Evitar; riesgo de mareo, desmayo y ca\u00eddas."},
+  {n:"Nitroglicerina",g:"Vasodilatador (nitrato)",a:["nitro-dur","nitroglicerina"],nivel:"moderado",tipo:"Hipotensi\u00f3n",mec:"Vasodilataci\u00f3n potenciada.",que:"Evitar; riesgo de hipotensi\u00f3n y desmayo."},
+  {n:"Enalapril",g:"Antihipertensivo (IECA)",a:["renitec","lotrial","enalapril"],nivel:"leve",tipo:"Hipotensi\u00f3n (leve)",mec:"El alcohol puede bajar m\u00e1s la presi\u00f3n.",que:"Moderaci\u00f3n; cuidado con el mareo al levantarse."},
+  {n:"Losart\u00e1n",g:"Antihipertensivo (ARA-II)",a:["cozaar","losartan"],nivel:"leve",tipo:"Hipotensi\u00f3n (leve)",mec:"Puede potenciar la baja de presi\u00f3n.",que:"Moderaci\u00f3n."},
+  {n:"Amlodipina",g:"Antihipertensivo (bloqueante c\u00e1lcico)",a:["norvasc","amlodipina"],nivel:"leve",tipo:"Hipotensi\u00f3n (leve)",mec:"Puede potenciar la baja de presi\u00f3n.",que:"Moderaci\u00f3n."},
+  {n:"Litio",g:"Estabilizador del \u00e1nimo",a:["ceglution","litio","carbonato de litio"],nivel:"moderado",tipo:"Toxicidad por deshidrataci\u00f3n",mec:"El alcohol deshidrata y puede subir los niveles de litio.",que:"Evitar excesos; mantener buena hidrataci\u00f3n."},
+  {n:"Fenito\u00edna",g:"Anticonvulsivante",a:["epamin","fenitoina"],nivel:"moderado",tipo:"Alteraci\u00f3n de niveles del f\u00e1rmaco",mec:"El alcohol agudo sube los niveles; el cr\u00f3nico los baja (m\u00e1s convulsiones).",que:"Evitar consumo irregular de alcohol."},
+  {n:"\u00c1cido valproico",g:"Anticonvulsivante / estabilizador",a:["depakene","valcote","acido valproico","valproato"],nivel:"moderado",tipo:"Hepatotoxicidad + depresi\u00f3n del SNC",mec:"Suma de da\u00f1o hep\u00e1tico y sedaci\u00f3n.",que:"Evitar alcohol."},
+  {n:"Carbamazepina",g:"Anticonvulsivante",a:["tegretol","carbamazepina"],nivel:"moderado",tipo:"Depresi\u00f3n del SNC + hepatotoxicidad",mec:"Sedaci\u00f3n y da\u00f1o hep\u00e1tico potenciados.",que:"Evitar alcohol."},
+  {n:"Lamotrigina",g:"Anticonvulsivante / estabilizador",a:["lamictal","lamotrigina"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Puede sumar mareo y somnolencia.",que:"Moderaci\u00f3n."},
+
+  /* ---- CORTICOIDES ---- */
+  {n:"Prednisona",g:"Corticoide",a:["meticorten","prednisona"],nivel:"leve",tipo:"Irritaci\u00f3n g\u00e1strica",mec:"Ambos irritan el est\u00f3mago; con uso prolongado sube el riesgo de \u00falcera.",que:"Con moderaci\u00f3n; cuidado si hay gastritis o uso prolongado."},
+  {n:"Dexametasona",g:"Corticoide",a:["decadron","dexametasona"],nivel:"leve",tipo:"Irritaci\u00f3n g\u00e1strica",mec:"Suma de irritaci\u00f3n g\u00e1strica.",que:"Con moderaci\u00f3n; cuidado con el est\u00f3mago."},
+
+  /* ---- SIN INTERACCI\u00d3N RELEVANTE (verde) ---- */
+  {n:"Amoxicilina",g:"Antibi\u00f3tico (penicilina)",a:["amoxicilina","amoxidal"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"El alcohol no afecta su eficacia (mito frecuente).",que:"No hay interacci\u00f3n real. Igual, si est\u00e1s enfermo, mejor descansar."},
+  {n:"Amoxicilina + clavul\u00e1nico",g:"Antibi\u00f3tico",a:["amoxicilina clavulanico","optamox duo","augmentin","clavulanico"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"Sin interacci\u00f3n farmacol\u00f3gica relevante con el alcohol.",que:"Sin interacci\u00f3n real; el alcohol puede aumentar molestias digestivas."},
+  {n:"Azitromicina",g:"Antibi\u00f3tico (macr\u00f3lido)",a:["azitromicina","zitromax"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No tiene efecto disulfiram ni pierde eficacia.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
+  {n:"Cefalexina",g:"Antibi\u00f3tico (cefalosporina 1\u00aa gen)",a:["cefalexina","keforal","keflex"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No tiene la cadena que produce efecto antab\u00fas.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
+  {n:"Ciprofloxacina",g:"Antibi\u00f3tico (fluoroquinolona)",a:["ciprofloxacina","ciriax","baycip"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Puede sumar somnolencia o mareo en personas sensibles.",que:"No hay interacci\u00f3n grave; con moderaci\u00f3n."},
+  {n:"Doxiciclina",g:"Antibi\u00f3tico (tetraciclina)",a:["doxiciclina","vibramicina"],nivel:"leve",tipo:"Posible menor eficacia (bebedores cr\u00f3nicos)",mec:"El alcohol cr\u00f3nico puede acelerar su eliminaci\u00f3n.",que:"Consumo ocasional: sin problema. Evitar excesos si sos bebedor frecuente."},
+  {n:"Salbutamol",g:"Broncodilatador (inhalador)",a:["ventolin","salbutamol"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No interact\u00faa de forma significativa con el alcohol.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
+  {n:"Budesonida",g:"Corticoide inhalado",a:["pulmicort","budesonida"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"Al ser inhalado, no interact\u00faa con el alcohol.",que:"Sin interacci\u00f3n real."},
+  {n:"Aciclovir",g:"Antiviral",a:["zovirax","aciclovir"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No interact\u00faa con el alcohol.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
+  {n:"Omeprazol",g:"Protector g\u00e1strico (IBP)",a:["omeprazol","losec","omesec"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No interact\u00faa con el alcohol.",que:"Sin interacci\u00f3n real. El alcohol igual irrita el est\u00f3mago."},
+  {n:"Loratadina",g:"Antihistam\u00ednico (2\u00aa generaci\u00f3n)",a:["loratadina","clarityne"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Sedaci\u00f3n m\u00ednima; menos que los de 1\u00aa generaci\u00f3n.",que:"Con moderaci\u00f3n; suele tolerarse bien."},
+  {n:"Cetirizina",g:"Antihistam\u00ednico (2\u00aa generaci\u00f3n)",a:["cetirizina","zyrtec"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Puede dar algo de sue\u00f1o en personas sensibles.",que:"Con moderaci\u00f3n."},
+  {n:"Levotiroxina",g:"Hormona tiroidea",a:["levotiroxina","t4 montpellier","eutirox","t4"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No interact\u00faa con el alcohol.",que:"Sin interacci\u00f3n real."},
+  {n:"Daflon (diosmina + hesperidina)",g:"Venot\u00f3nico / flebot\u00f3nico",a:["daflon","diosmina","hesperidina","diosmina hesperidina"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No hay interacci\u00f3n farmacol\u00f3gica documentada con el alcohol. Ojo: el alcohol dilata las venas y puede ir en contra del efecto venot\u00f3nico.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n: el consumo importante de alcohol dilata las venas y puede empeorar los s\u00edntomas venosos (piernas pesadas, hinchaz\u00f3n)."},
+  {n:"Anticonceptivos orales",g:"Anticoncepci\u00f3n hormonal",a:["anticonceptivos","pastillas anticonceptivas","etinilestradiol"],nivel:"seguro",tipo:"Sin interacci\u00f3n farmacol\u00f3gica",mec:"El alcohol no reduce su eficacia.",que:"Sin interacci\u00f3n real. Ojo: emborracharse y vomitar u olvidar la toma s\u00ed puede reducir la protecci\u00f3n."}
+];
+
+/* ================== BÚSQUEDA ================== */
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+DB.forEach(d => { d._keys = [norm(d.n), ...d.a.map(norm)]; });
+
+const NIVEL_LABEL = {grave:"EVITAR", moderado:"PRECAUCIÓN", leve:"CUIDADO LEVE", seguro:"SIN INTERACCIÓN RELEVANTE"};
+
+const q = document.getElementById("q");
+const clearBtn = document.getElementById("clear");
+const results = document.getElementById("results");
+const chipsBox = document.getElementById("chips");
+
+const EJEMPLOS = ["Paracetamol","Ibuprofeno","Levotiroxina","Enalapril","Losartán","Amoxicilina","Acenocumarol","Atorvastatina","Omeprazol","Clonazepam"];
+EJEMPLOS.forEach(name => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.textContent = name;
+  b.onclick = () => { q.value = name; q.focus(); update(); };
+  chipsBox.appendChild(b);
+});
+
+function search(term){
+  const t = norm(term);
+  if(!t) return [];
+  const starts = [], contains = [];
+  for(const d of DB){
+    let hit = 0; // 0 none, 1 contains, 2 starts
+    for(const k of d._keys){
+      if(k.startsWith(t)){ hit = 2; break; }
+      if(k.includes(t)) hit = Math.max(hit,1);
+    }
+    if(hit === 2) starts.push(d);
+    else if(hit === 1) contains.push(d);
+  }
+  return [...starts, ...contains].slice(0, 8);
+}
+
+function card(d){
+  const el = document.createElement("div");
+  el.className = "card " + d.nivel;
+  el.innerHTML = `
+    <div class="card-top">
+      <div>
+        <div class="drug">${d.n}</div>
+        <div class="grupo">${d.g}</div>
+        <div class="alias">${d.a.slice(0,3).join(" · ")}</div>
+      </div>
+      <div class="pill ${d.nivel}"><span class="dot"></span>${NIVEL_LABEL[d.nivel]}</div>
+    </div>
+    <div class="tipo">${d.tipo}</div>
+    <div class="row"><span class="k">Por qué</span><span class="v mecanismo">${d.mec}</span></div>
+    <div class="row"><span class="k">Qué hacer</span><span class="v">${d.que}</span></div>
+  `;
+  return el;
+}
+
+function update(){
+  const term = q.value;
+  clearBtn.classList.toggle("show", term.length > 0);
+  results.innerHTML = "";
+
+  if(!term.trim()){
+    results.innerHTML = `<div class="msg"><div class="big">Buscá tu remedio 👆</div>Escribí el nombre y te digo si conviene o no combinarlo con alcohol. Probá con uno de los ejemplos de arriba.</div>`;
+    return;
+  }
+
+  const found = search(term);
+  if(found.length === 0){
+    results.innerHTML = `<div class="msg"><div class="big">No lo encontré 🤔</div>Revisá cómo se escribe o probá con el <strong>nombre genérico</strong> (el de la droga, no la marca).<br><br>Que no esté en la lista <strong>no significa que sea seguro</strong>. Consultá a tu farmacéutico/a.</div>`;
+    return;
+  }
+
+  const c = document.createElement("div");
+  c.className = "count";
+  c.textContent = found.length === 1 ? "1 resultado" : found.length + " resultados";
+  results.appendChild(c);
+  found.forEach(d => results.appendChild(card(d)));
+}
+
+q.addEventListener("input", update);
+clearBtn.addEventListener("click", () => { q.value=""; q.focus(); update(); });
+update();
+</script>
+</body>
+</html>
