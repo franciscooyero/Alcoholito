@@ -152,6 +152,36 @@
   @media (prefers-reduced-motion: reduce){
     .card{animation:none;}
   }
+
+  /* ---------- Predictive suggestions ---------- */
+  .suggestions{
+    position:absolute; top:100%; left:0; right:0; margin-top:8px;
+    background:var(--surface); border:1.5px solid var(--border-strong);
+    border-radius:16px; box-shadow:var(--shadow); overflow-y:auto; max-height:340px;
+    z-index:60; display:none;
+  }
+  .suggestions.show{display:block;}
+  .sug-item{
+    display:flex; align-items:center; gap:10px; padding:11px 16px; cursor:pointer;
+    border-bottom:1px solid var(--border);
+  }
+  .sug-item:last-child{border-bottom:none;}
+  .sug-item:hover, .sug-item.active{background:#FBF3E1;}
+  .sug-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;}
+  .sug-dot.grave{background:var(--rojo);} .sug-dot.moderado{background:var(--naranja);}
+  .sug-dot.leve{background:var(--amarillo);} .sug-dot.seguro{background:var(--verde);}
+  .sug-name{font-size:15px;color:var(--ink);font-weight:500;}
+  .sug-name b{color:var(--amber-deep);font-weight:700;}
+  .sug-brand{margin-left:auto;font-size:12.5px;color:#9A8F77;font-style:italic;white-space:nowrap;padding-left:8px;}
+  .sug-empty{padding:14px 16px;color:var(--muted);font-size:14px;}
+
+  /* ---------- Flag + Malvinas (footer) ---------- */
+  .ar-mark{display:flex; align-items:center; justify-content:center; gap:9px; margin-top:12px;}
+  .ar-mark .flag{width:30px; height:20px; border-radius:3px; display:block;
+    box-shadow:var(--shadow); border:1px solid var(--border-strong);}
+  .ar-mark .malvinas{width:34px; height:auto; display:block;
+    filter:drop-shadow(0 1px 1px rgba(60,45,20,.18));}
+
 </style>
 </head>
 <body>
@@ -165,6 +195,7 @@
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
     <input id="q" type="text" autocomplete="off" spellcheck="false" placeholder="Escribí el nombre del remedio…" aria-label="Buscar medicamento">
     <button class="clearbtn" id="clear" aria-label="Borrar">×</button>
+    <div class="suggestions" id="sug"></div>
   </div>
   <p class="hint">Podés buscar por nombre genérico (metronidazol) o comercial (flagyl).</p>
 
@@ -187,7 +218,143 @@
     Nunca es recomendable mezclar medicación con alcohol.<br>
     Siempre que tomes, hacelo con moderación; y si tomás, no manejes.
   </p>
-  <footer>Hecho con 🧡 para tomar decisiones más informadas.</footer>
+  <footer>Hecho con 🧡 para tomar decisiones más informadas.
+    <div class="ar-mark" title="Argentina · Islas Malvinas Argentinas">
+      <svg class="flag" viewBox="0 0 30 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect width="30" height="20" fill="#ffffff"/><rect width="30" height="6.667" y="0" fill="#74ACDF"/><rect width="30" height="6.667" y="13.333" fill="#74ACDF"/><circle cx="15" cy="10" r="2.3" fill="#F6B40E" stroke="#843511" stroke-width="0.35"/></svg>
+      <svg class="malvinas" viewBox="0 0 921 517" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+<g transform="translate(0.000000,517.000000) scale(0.100000,-0.100000)"
+fill="#74ACDF" stroke="none">
+<path d="M3356 4867 c-36 -27 5 -72 130 -142 73 -42 102 -71 129 -130 40 -86
+86 -115 181 -115 46 0 61 -5 102 -35 121 -86 244 -66 259 45 5 33 9 40 22 34
+130 -53 264 48 216 163 -50 118 -176 151 -311 80 -89 -47 -123 -47 -217 -3
+-174 82 -461 140 -511 103z"/>
+<path d="M5903 4753 c-56 -19 -93 -64 -93 -110 0 -41 29 -73 163 -181 111 -90
+101 -141 -42 -216 -76 -40 -101 -66 -101 -107 0 -42 26 -56 124 -64 90 -7 90
+-7 65 -26 -13 -10 -50 -28 -82 -39 -60 -22 -93 -63 -80 -97 8 -19 -24 -50 -63
+-63 -28 -9 -45 -8 -102 11 -89 29 -130 22 -172 -29 -48 -58 -36 -118 34 -161
+43 -27 86 -69 86 -84 0 -7 -15 -22 -34 -34 -49 -32 -82 -104 -68 -150 10 -34
+9 -39 -24 -77 -44 -52 -51 -54 -154 -56 -95 -1 -133 -15 -171 -64 -46 -58 -22
+-126 50 -142 72 -17 91 -56 36 -74 -44 -15 -75 -54 -75 -96 0 -44 9 -48 130
+-55 119 -6 163 -23 180 -73 10 -28 7 -32 -39 -77 -28 -27 -67 -57 -88 -69 -21
+-11 -53 -32 -72 -46 -23 -16 -41 -22 -55 -18 -39 12 -42 23 -16 70 68 129 -45
+248 -165 174 -37 -23 -45 -19 -45 27 0 21 -6 36 -15 40 -18 6 -55 -23 -55 -43
+0 -7 -25 -32 -55 -54 -117 -86 -115 -197 6 -325 64 -68 59 -78 -35 -69 -88 8
+-120 -6 -167 -70 -35 -49 -80 -76 -129 -76 -65 0 -117 -52 -108 -111 3 -23 1
+-24 -49 -21 -102 7 -181 -74 -159 -162 3 -14 24 -46 46 -71 56 -65 56 -66 -48
+-146 -46 -35 -122 -132 -122 -156 0 -4 -10 -21 -23 -37 -23 -28 -23 -28 -107
+-17 -160 21 -208 8 -226 -65 -8 -31 1 -40 90 -97 66 -43 76 -60 54 -95 -66
+-103 -61 -127 46 -240 107 -114 122 -140 135 -239 12 -96 31 -131 103 -187 35
+-28 58 -56 80 -103 37 -78 73 -105 178 -128 41 -9 99 -30 128 -47 87 -50 151
+-38 186 36 32 67 -11 130 -109 160 -83 27 -98 47 -91 121 10 92 -11 124 -94
+151 -65 21 -65 21 -65 88 0 67 0 67 -55 117 -61 58 -59 63 28 71 47 5 57 2 89
+-24 38 -29 57 -30 98 -2 26 18 40 18 100 -6 27 -10 67 -22 89 -25 48 -8 81
+-40 96 -93 12 -47 45 -77 94 -86 46 -9 53 -20 58 -94 5 -71 26 -107 79 -135
+43 -23 253 -19 369 8 76 17 76 17 179 -9 171 -43 238 -36 296 31 25 28 38 35
+72 37 84 4 102 49 52 128 -44 68 -69 66 -174 -13 -93 -69 -127 -82 -170 -65
+-27 12 -40 26 -52 55 -18 45 -66 71 -132 71 -64 0 -72 6 -65 51 11 68 -32 98
+-171 119 -117 18 -135 29 -122 78 13 50 6 67 -38 93 -27 16 -38 31 -46 65 -15
+60 -58 116 -119 157 -45 30 -49 36 -35 47 43 35 51 103 16 125 -16 10 -13 25
+7 32 9 3 39 26 65 51 60 54 91 53 147 -8 46 -50 96 -49 139 4 25 30 50 19 72
+-31 11 -26 37 -66 59 -89 39 -43 44 -56 55 -167 11 -114 80 -197 165 -197 56
+0 103 47 93 92 -3 14 2 18 21 18 14 0 38 11 53 24 28 24 28 25 25 130 -4 123
+0 128 112 128 55 0 60 -2 89 -38 31 -38 67 -73 116 -112 25 -19 25 -19 0 -78
+-46 -112 -23 -241 53 -297 27 -20 28 -20 68 -2 127 57 205 241 166 389 -9 33
+-14 61 -12 63 2 3 39 13 83 24 181 45 273 98 273 158 0 58 -61 68 -154 25 -56
+-25 -56 -25 -94 -7 -41 20 -101 123 -102 174 0 14 -10 41 -23 60 -22 32 -26
+34 -96 39 -79 5 -74 2 -155 104 -38 46 -91 64 -144 48 -36 -11 -37 -11 -73 31
+-36 42 -36 42 -117 45 -91 5 -98 9 -126 85 -21 56 -43 72 -109 82 -76 10 -74
+53 3 76 35 11 44 9 107 -21 58 -28 80 -34 150 -35 99 -3 97 -2 124 -76 25 -67
+48 -90 117 -114 91 -32 132 -55 187 -105 61 -55 73 -57 127 -18 55 38 157 77
+219 84 93 9 135 -6 194 -67 79 -82 174 -113 274 -89 61 14 111 64 111 110 0
+35 -8 42 -80 78 -98 48 -83 60 77 59 157 -2 222 18 276 82 33 40 34 62 3 97
+-21 25 -31 28 -109 33 -102 7 -113 15 -67 50 34 26 45 37 93 95 22 28 24 28
+53 13 16 -8 45 -32 64 -52 77 -81 137 -91 246 -41 77 35 153 43 229 22 168
+-44 362 -44 415 1 34 28 43 89 15 99 -36 14 -10 19 54 10 99 -14 164 3 243 62
+71 52 116 71 169 72 43 0 99 35 117 73 34 70 -21 97 -218 107 -116 5 -154 11
+-190 28 -25 11 -88 30 -139 42 -98 22 -163 57 -194 104 -22 33 -21 36 5 36 12
+0 39 12 60 26 38 27 38 27 190 21 120 -4 173 -11 247 -31 139 -38 193 -29 225
+39 36 75 -60 198 -141 182 -16 -3 -57 -12 -93 -21 -36 -8 -83 -15 -105 -16
+-40 0 -40 0 -10 18 100 61 66 170 -65 209 -30 9 -64 24 -74 34 -18 17 -17 18
+25 29 150 40 142 189 -13 235 -77 23 -254 20 -316 -4 -49 -20 -49 -20 -98 5
+-71 36 -329 33 -382 -4 -54 -39 -76 -94 -77 -189 0 -105 17 -127 104 -136 105
+-11 111 -21 42 -71 -41 -29 -48 -31 -135 -30 -114 1 -153 14 -222 74 -38 34
+-66 49 -95 54 -71 11 -79 19 -72 76 5 46 4 51 -25 78 -29 27 -155 82 -188 82
+-20 0 -17 10 12 37 32 29 29 89 -6 112 -37 25 -20 31 93 31 141 0 189 19 225
+90 33 67 16 135 -58 228 -53 68 -101 92 -182 92 -96 0 -133 14 -165 63 -34 50
+-49 54 -115 32 -230 -75 -308 -174 -193 -245 61 -37 32 -59 -81 -61 -75 -2
+-94 9 -64 36 74 67 -67 205 -211 205 -70 0 -76 5 -118 94 -62 129 -170 237
+-235 235 -17 0 -50 -7 -73 -16z"/>
+<path d="M4554 4544 c-194 -131 -205 -151 -124 -239 37 -40 44 -67 26 -109
+-20 -47 -58 -64 -171 -76 -102 -11 -138 -22 -199 -64 -48 -32 -66 -33 -103 -2
+-65 54 -142 71 -241 55 -83 -13 -108 -7 -128 33 -33 64 -73 88 -145 88 -53 0
+-72 -11 -142 -78 -50 -49 -60 -55 -75 -44 -106 77 -223 74 -246 -6 -12 -41 11
+-76 72 -110 46 -26 55 -52 20 -52 -53 0 -357 45 -518 77 -252 50 -260 53 -360
+152 -127 125 -209 171 -305 171 -20 0 -39 8 -51 21 -62 70 -164 75 -376 18
+-78 -20 -61 -80 35 -127 68 -33 80 -52 66 -102 -13 -45 -9 -140 6 -169 35 -69
+123 -111 193 -94 30 8 45 7 67 -4 27 -15 87 -14 146 2 24 6 28 4 34 -25 15
+-70 147 -157 274 -183 73 -14 84 -28 45 -54 -23 -14 -49 -18 -137 -18 -109 0
+-109 0 -138 -33 -16 -18 -29 -42 -29 -53 0 -31 58 -83 113 -102 26 -9 66 -24
+90 -32 24 -9 70 -41 107 -76 104 -97 167 -114 222 -59 30 30 32 47 13 93 -13
+31 13 18 35 -19 51 -82 47 -145 -11 -175 -52 -26 -74 -60 -59 -89 12 -23 67
+-60 89 -60 7 0 37 -24 65 -53 33 -35 66 -59 95 -68 39 -13 46 -20 55 -53 23
+-82 140 -131 195 -82 21 19 44 17 131 -11 25 -8 -34 -51 -95 -68 -91 -27 -162
+4 -236 101 -56 73 -82 92 -142 103 -38 7 -56 17 -78 44 -59 72 -161 77 -252
+14 -52 -36 -52 -36 -77 -12 -78 74 -186 54 -298 -56 -52 -51 -52 -51 -83 -25
+-69 58 -163 10 -124 -63 8 -16 19 -33 25 -36 5 -3 10 -31 10 -62 0 -78 18
+-131 54 -158 90 -68 187 -37 202 64 7 49 34 87 72 102 29 11 64 -3 166 -69
+127 -84 204 -99 313 -60 62 21 62 21 102 -5 68 -45 52 -71 -49 -80 -86 -8
+-133 -22 -170 -54 -29 -24 -34 -25 -68 -14 -20 6 -55 12 -77 13 -38 3 -40 5
+-43 38 -4 39 -23 65 -64 86 -61 32 -138 2 -220 -84 -59 -62 -61 -98 -8 -142
+68 -56 24 -120 -112 -163 -129 -41 -162 -91 -95 -141 66 -49 183 -23 278 62
+50 45 50 45 72 25 12 -11 37 -29 55 -39 49 -28 39 -49 -58 -126 -47 -37 -109
+-92 -137 -123 -52 -54 -54 -55 -109 -55 -70 0 -114 -25 -150 -85 -40 -69 -49
+-73 -87 -38 -68 64 -139 72 -223 23 -98 -55 -138 -128 -110 -195 9 -21 16 -39
+16 -41 0 -2 -17 -4 -39 -4 -48 0 -93 -15 -154 -53 -54 -33 -125 -34 -303 -6
+-140 22 -234 -12 -234 -84 0 -65 76 -107 195 -107 121 0 188 -48 236 -169 43
+-109 101 -159 193 -168 84 -8 104 26 105 181 1 75 18 129 48 158 29 27 38 18
+48 -49 10 -66 87 -104 140 -69 33 22 56 14 94 -30 39 -44 39 -76 -1 -126 -99
+-125 64 -233 237 -158 22 10 77 32 121 50 100 39 145 83 144 142 -1 53 -66
+114 -132 125 -51 8 -54 17 -19 49 60 53 49 126 -25 166 -40 21 -56 37 -36 38
+4 1 26 5 49 9 58 11 72 -1 83 -76 13 -94 40 -127 126 -153 35 -10 46 -10 75 5
+62 32 67 78 16 145 -17 24 -36 48 -41 55 -5 7 -6 20 -3 29 17 44 159 -13 237
+-94 29 -32 59 -52 85 -59 56 -15 65 -14 121 14 27 14 76 32 109 41 121 31 153
+110 74 178 -36 31 -39 36 -23 41 108 33 143 89 88 140 -36 33 -32 35 56 25
+244 -29 308 -2 413 170 42 67 67 96 121 136 96 71 106 95 62 139 -41 41 -87
+42 -162 5 -88 -43 -100 -39 -68 25 28 57 25 87 -12 126 -22 23 -23 27 -9 33
+28 10 110 7 192 -9 308 -59 528 96 483 342 -13 73 -4 98 46 132 64 44 83 135
+34 161 -31 17 -49 40 -44 55 10 24 -17 87 -49 117 -31 28 -31 28 -12 54 11 14
+32 33 47 42 26 15 28 15 54 -11 37 -38 88 -50 131 -32 36 15 215 158 272 218
+63 67 29 137 -68 137 -57 0 -70 19 -78 113 -7 66 -9 65 54 31 53 -28 85 -27
+158 6 22 9 85 36 140 59 209 86 260 124 237 176 -15 33 -69 65 -109 65 -18 0
+-33 4 -33 10 0 11 21 16 90 24 52 6 85 37 75 70 -3 12 -9 37 -12 57 -6 38 -12
+30 102 122 70 57 65 156 -12 230 -64 60 -180 79 -338 56 -83 -13 -96 -9 -77
+22 17 28 6 56 -28 74 -41 21 -62 19 -106 -11z"/>
+<path d="M951 2264 c-15 -19 -21 -41 -21 -80 0 -45 -4 -56 -27 -74 -32 -25
+-36 -24 -65 20 -51 75 -123 98 -186 60 -28 -17 -39 -19 -70 -10 -106 29 -191
+-2 -192 -72 0 -20 16 -43 60 -88 65 -67 77 -91 61 -134 -42 -109 58 -204 183
+-176 43 9 49 8 88 -20 104 -76 209 -8 193 124 -8 64 4 98 71 186 27 36 62 91
+78 123 28 57 29 59 13 93 -35 72 -145 101 -186 48z"/>
+<path d="M7075 1709 c-11 -6 -45 -38 -76 -70 -51 -54 -59 -59 -98 -59 -145 0
+-196 -164 -62 -200 47 -12 56 -23 36 -40 -16 -14 -20 -57 -6 -78 8 -14 199
+-82 229 -82 31 0 98 40 115 69 25 42 22 94 -8 129 -28 34 -32 52 -11 52 49 0
+72 106 31 137 -23 16 -25 21 -15 50 26 73 -61 132 -135 92z"/>
+<path d="M1030 1613 c-47 -25 -88 -51 -93 -58 -22 -39 52 -95 126 -95 17 0 46
+-9 62 -20 70 -46 149 -12 158 68 5 40 2 45 -34 80 -38 35 -102 72 -124 71 -5
+0 -48 -21 -95 -46z"/>
+<path d="M3618 1134 c-54 -46 -58 -51 -58 -94 0 -44 5 -51 58 -84 67 -42 81
+-104 36 -163 -41 -55 -32 -90 36 -128 55 -31 55 -31 55 -120 0 -102 15 -144
+57 -159 51 -18 77 36 43 88 -47 71 -37 123 30 164 54 32 85 88 85 154 0 65
+-17 107 -47 114 -40 10 -143 121 -143 154 0 39 -54 110 -84 110 -13 0 -44 -16
+-68 -36z"/>
+<path d="M3872 325 c-18 -15 -42 -25 -60 -25 -44 0 -60 -22 -67 -95 -8 -73 -1
+-87 63 -127 29 -18 33 -25 28 -49 -5 -29 -5 -29 47 -29 44 0 59 5 97 36 93 73
+104 118 45 183 -20 21 -43 60 -51 85 -19 55 -53 62 -102 21z"/>
+<path d="M4011 44 c-32 -41 -27 -44 69 -44 50 0 90 2 90 4 0 60 -120 90 -159
+40z"/>
+</g>
+</svg>
+    </div>
+  </footer>
 </div>
 
 <script>
@@ -199,12 +366,25 @@ const DB = [
   {n:"Ornidazol",g:"Antiparasitario (nitroimidazol)",a:["ornidazol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Interfiere en el metabolismo del alcohol.",que:"Evitar alcohol durante y varios d\u00edas despu\u00e9s del tratamiento."},
   {n:"Secnidazol",g:"Antiparasitario (nitroimidazol)",a:["secnidazol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Acumulaci\u00f3n de acetaldeh\u00eddo.",que:"Evitar alcohol durante y d\u00edas despu\u00e9s."},
   {n:"Disulfiram",g:"Tratamiento del alcoholismo",a:["antabus","disulfiram"],nivel:"grave",tipo:"Reacci\u00f3n disulfiram (es el f\u00e1rmaco que la produce)",mec:"Inhibe directamente la aldeh\u00eddo deshidrogenasa.",que:"Absolutamente nada de alcohol (ni jarabes, enjuagues o comidas con alcohol). La reacci\u00f3n puede ser severa y peligrosa."},
-  {n:"Cefalosporinas (algunas)",g:"Antibi\u00f3ticos (cefoperazona, cefamandol, cefotet\u00e1n)",a:["cefoperazona","cefamandol","cefotetan","cefmetazol","ceftriaxona"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Las que tienen cadena lateral NMTT inhiben la aldeh\u00eddo deshidrogenasa.",que:"Evitar alcohol durante el tratamiento y hasta 3 d\u00edas despu\u00e9s."},
+    /* ---- CEFALOSPORINAS (individuales) ---- */
+  {n:"Cefazolina",g:"Cefalosporina 1ª generación (EV)",a:["cefazolina"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"La mayoría de las cefalosporinas no interactúan con el alcohol.",que:"Sin interacción relevante."},
+  {n:"Cefadroxilo",g:"Cefalosporina 1ª generación (oral)",a:["cefadroxilo"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante. Con moderación."},
+  {n:"Cefuroxima",g:"Cefalosporina 2ª generación (respiratoria / ITU)",a:["cefuroxima"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No tiene la cadena NMTT, así que no da efecto antabús.",que:"Sin interacción relevante. Con moderación."},
+  {n:"Cefaclor",g:"Cefalosporina 2ª generación (oral)",a:["cefaclor"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante. Con moderación."},
+  {n:"Ceftriaxona",g:"Cefalosporina 3ª generación (EV/IM) — NAC, ITU, meningitis",a:["ceftriaxona","acantex"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No tiene la cadena NMTT: no da efecto antabús (es un mito frecuente).",que:"Sin interacción relevante. Con moderación."},
+  {n:"Cefotaxima",g:"Cefalosporina 3ª generación (EV)",a:["cefotaxima"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante."},
+  {n:"Ceftazidima",g:"Cefalosporina 3ª generación (EV, antipseudomona)",a:["ceftazidima"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante."},
+  {n:"Cefixima",g:"Cefalosporina 3ª generación (oral, ITU)",a:["cefixima"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante. Con moderación."},
+  {n:"Cefepima",g:"Cefalosporina 4ª generación (EV)",a:["cefepima"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante."},
+  {n:"Cefoperazona",g:"Cefalosporina 3ª generación (cadena NMTT)",a:["cefoperazona"],nivel:"grave",tipo:"Efecto disulfiram (antabús)",mec:"Tiene cadena lateral NMTT: inhibe la aldehído deshidrogenasa y da reacción tipo antabús con el alcohol.",que:"Evitar alcohol durante el tratamiento y hasta 3 días después."},
+  {n:"Cefamandol",g:"Cefalosporina 2ª generación (cadena NMTT)",a:["cefamandol"],nivel:"grave",tipo:"Efecto disulfiram (antabús)",mec:"Cadena NMTT: reacción tipo antabús con el alcohol.",que:"Evitar alcohol durante el tratamiento y hasta 3 días después."},
+  {n:"Cefotetán",g:"Cefalosporina 2ª generación (cadena NMTT)",a:["cefotetan"],nivel:"grave",tipo:"Efecto disulfiram (antabús)",mec:"Cadena NMTT: reacción tipo antabús con el alcohol.",que:"Evitar alcohol durante el tratamiento y hasta 3 días después."},
   {n:"Griseofulvina",g:"Antif\u00fangico",a:["griseofulvina"],nivel:"grave",tipo:"Efecto disulfiram + potencia efectos del alcohol",mec:"Reacci\u00f3n tipo antab\u00fas y aumento de la sensibilidad al alcohol.",que:"Evitar alcohol durante el tratamiento."},
   {n:"Ketoconazol",g:"Antif\u00fangico (oral)",a:["ketoconazol"],nivel:"grave",tipo:"Efecto disulfiram + hepatotoxicidad",mec:"Reacci\u00f3n tipo antab\u00fas y suma de da\u00f1o hep\u00e1tico.",que:"Evitar alcohol; ambos son hepatot\u00f3xicos."},
   {n:"Cloranfenicol",g:"Antibi\u00f3tico",a:["cloranfenicol"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Inhibe el metabolismo del acetaldeh\u00eddo.",que:"Evitar alcohol durante el tratamiento."},
   {n:"Clorpropamida",g:"Antidiab\u00e9tico (sulfonilurea)",a:["clorpropamida"],nivel:"grave",tipo:"Efecto disulfiram + hipoglucemia",mec:"Reacci\u00f3n tipo antab\u00fas (rubor) y riesgo de hipoglucemia.",que:"Evitar alcohol: da rubor facial y puede bajar mucho el az\u00facar."},
   {n:"Furazolidona",g:"Antibi\u00f3tico / antiparasitario",a:["furazolidona"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas)",mec:"Inhibe el metabolismo del alcohol.",que:"Evitar alcohol durante el tratamiento y d\u00edas despu\u00e9s."},
+  {n:"Trimetoprima-sulfametoxazol (Bactrim)",g:"Antibi\u00f3tico (sulfonamida + trimetoprima)",a:["trimetoprima sulfametoxazol","tms","cotrimoxazol","bactrim","sulfametoxazol","trimetoprima","bacterol"],nivel:"moderado",tipo:"Posible efecto disulfiram + molestias",mec:"La parte sulfamida puede dar, en algunas personas, una reacci\u00f3n tipo antab\u00fas (rubor, n\u00e1useas); adem\u00e1s ambos cargan el h\u00edgado.",que:"Mejor evitar el alcohol durante el tratamiento: puede dar n\u00e1useas, rubor y malestar."},
 
   /* ---- DEPRESI\u00d3N DEL SNC (grave) ---- */
   {n:"Diazepam",g:"Benzodiacepina (ansiol\u00edtico)",a:["valium","diazepam"],nivel:"grave",tipo:"Depresi\u00f3n del sistema nervioso central",mec:"Ambos deprimen el SNC v\u00eda GABA: se potencian.",que:"No combinar. Riesgo de somnolencia extrema, ca\u00eddas y depresi\u00f3n respiratoria."},
@@ -343,7 +523,7 @@ const DB = [
   {n:"Febuxostat",g:"Gota cr\u00f3nica (baja el \u00e1cido \u00farico)",a:["febuxostat","adenuric"],nivel:"moderado",tipo:"Menor efecto + hepatotoxicidad",mec:"El alcohol sube el \u00e1cido \u00farico (le resta efecto) y suma da\u00f1o hep\u00e1tico.",que:"Limitar mucho el alcohol durante el tratamiento."},
 
   /* ---- OTROS NITROFURANOS ---- */
-  {n:"Nitrofuranto\u00edna",g:"Antibi\u00f3tico urinario (nitrofurano)",a:["nitrofurantoina","macrodantina"],nivel:"moderado",tipo:"Molestias digestivas / posible efecto disulfiram",mec:"Con alcohol puede dar n\u00e1useas y molestias; el efecto tipo antab\u00fas es m\u00e1s t\u00edpico de la furazolidona, pero conviene evitarlo.",que:"Mejor evitar el alcohol durante el tratamiento."},
+  {n:"Nitrofuranto\u00edna",g:"Antibi\u00f3tico urinario (nitrofurano)",a:["nitrofurantoina","macrodantina","furadantina","urofuran"],nivel:"moderado",tipo:"Molestias digestivas / posible efecto disulfiram",mec:"Con alcohol puede dar n\u00e1useas y molestias; el efecto tipo antab\u00fas es m\u00e1s t\u00edpico de la furazolidona, pero conviene evitarlo.",que:"Mejor evitar el alcohol durante el tratamiento."},
   {n:"Nifurtimox",g:"Antiparasitario (nitrofurano) - Chagas",a:["nifurtimox","lampit"],nivel:"grave",tipo:"Aumento de efectos adversos (tratamiento de Chagas)",mec:"Nitrofurano usado para la enfermedad de Chagas; el alcohol aumenta n\u00e1useas, mareos y la toxicidad del tratamiento.",que:"Nada de alcohol durante todo el tratamiento de Chagas."},
   {n:"Benznidazol",g:"Antiparasitario (nitroimidazol) - Chagas",a:["benznidazol","abarax","radanil"],nivel:"grave",tipo:"Efecto disulfiram (antab\u00fas) - tratamiento de Chagas",mec:"Nitroimidazol para Chagas; con alcohol da reacci\u00f3n tipo antab\u00fas (rubor, n\u00e1useas, v\u00f3mitos, taquicardia).",que:"Nada de alcohol durante el tratamiento y unos d\u00edas despu\u00e9s."},
 
@@ -352,7 +532,15 @@ const DB = [
   {n:"Amoxicilina + clavul\u00e1nico",g:"Antibi\u00f3tico",a:["amoxicilina clavulanico","optamox duo","augmentin","clavulanico"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"Sin interacci\u00f3n farmacol\u00f3gica relevante con el alcohol.",que:"Sin interacci\u00f3n real; el alcohol puede aumentar molestias digestivas."},
   {n:"Azitromicina",g:"Antibi\u00f3tico (macr\u00f3lido)",a:["azitromicina","zitromax","doyle"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No tiene efecto disulfiram ni pierde eficacia.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
   {n:"Cefalexina",g:"Antibi\u00f3tico (cefalosporina 1\u00aa gen)",a:["cefalexina","keforal","keflex"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No tiene la cadena que produce efecto antab\u00fas.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
-  {n:"Ciprofloxacina",g:"Antibi\u00f3tico (fluoroquinolona)",a:["ciprofloxacina","ciriax","baycip"],nivel:"leve",tipo:"Depresi\u00f3n del SNC (leve)",mec:"Puede sumar somnolencia o mareo en personas sensibles.",que:"No hay interacci\u00f3n grave; con moderaci\u00f3n."},
+    {n:"Ciprofloxacina",g:"Antibiótico (fluoroquinolona) — ITU",a:["ciprofloxacina","ciriax","baycip"],nivel:"leve",tipo:"Depresión del SNC (leve)",mec:"Puede sumar somnolencia o mareo en personas sensibles.",que:"No hay interacción grave; con moderación."},
+  {n:"Levofloxacina",g:"Antibiótico (fluoroquinolona) — NAC / ITU",a:["levofloxacina","uniflox","leflumax"],nivel:"leve",tipo:"Depresión del SNC (leve)",mec:"Puede sumar mareo y somnolencia; en general no hay interacción grave.",que:"No hay interacción grave; con moderación."},
+  {n:"Norfloxacina",g:"Antibiótico (fluoroquinolona) — ITU",a:["norfloxacina"],nivel:"leve",tipo:"Depresión del SNC (leve)",mec:"Puede sumar somnolencia o mareo.",que:"No hay interacción grave; con moderación."},
+  {n:"Moxifloxacina",g:"Antibiótico (fluoroquinolona) — NAC",a:["moxifloxacina","avelox"],nivel:"leve",tipo:"Depresión del SNC (leve)",mec:"Puede sumar mareo/somnolencia; también prolonga el QT (no por el alcohol).",que:"No hay interacción grave; con moderación."},
+
+  /* ---- OTROS ITU / NAC ---- */
+  {n:"Claritromicina",g:"Antibiótico (macrólido) — NAC",a:["claritromicina","klaricid"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No tiene efecto disulfiram ni pierde eficacia con el alcohol.",que:"Sin interacción relevante. Con moderación."},
+  {n:"Fosfomicina",g:"Antibiótico — ITU (monodosis)",a:["fosfomicina"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa con el alcohol.",que:"Sin interacción relevante. Con moderación."},
+  {n:"Clindamicina",g:"Antibiótico (lincosamida)",a:["clindamicina"],nivel:"seguro",tipo:"Sin interacción relevante",mec:"No interactúa de forma relevante con el alcohol.",que:"Sin interacción relevante. Con moderación."},
   {n:"Doxiciclina",g:"Antibi\u00f3tico (tetraciclina)",a:["doxiciclina","vibramicina"],nivel:"leve",tipo:"Posible menor eficacia (bebedores cr\u00f3nicos)",mec:"El alcohol cr\u00f3nico puede acelerar su eliminaci\u00f3n.",que:"Consumo ocasional: sin problema. Evitar excesos si sos bebedor frecuente."},
   {n:"Salbutamol",g:"Broncodilatador (inhalador)",a:["ventolin","salbutamol"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"No interact\u00faa de forma significativa con el alcohol.",que:"Sin interacci\u00f3n real. Con moderaci\u00f3n."},
   {n:"Budesonida",g:"Corticoide inhalado",a:["pulmicort","budesonida"],nivel:"seguro",tipo:"Sin interacci\u00f3n relevante",mec:"Al ser inhalado, no interact\u00faa con el alcohol.",que:"Sin interacci\u00f3n real."},
@@ -422,32 +610,88 @@ function card(d){
   return el;
 }
 
+function renderCards(list){
+  results.innerHTML = "";
+  const c = document.createElement("div");
+  c.className = "count";
+  c.textContent = list.length === 1 ? "1 resultado" : list.length + " resultados";
+  results.appendChild(c);
+  list.forEach(d => results.appendChild(card(d)));
+}
+function emptyPrompt(){
+  results.innerHTML = `<div class="msg"><div class="big">Buscá tu remedio 👆</div>Escribí el nombre y te digo si conviene o no combinarlo con alcohol. Probá con uno de los ejemplos de arriba.</div>`;
+}
+function notFoundMsg(){
+  results.innerHTML = `<div class="msg"><div class="big">No lo encontré 🤔</div>Revisá cómo se escribe o probá con el <strong>nombre genérico</strong> (el de la droga, no la marca).<br><br>Que no esté en la lista <strong>no significa que sea seguro</strong>. Consultá a tu farmacéutico/a.</div>`;
+}
+
+/* ---- buscador predictivo ---- */
+const sug = document.getElementById("sug");
+let sugList = [];
+let sugActive = -1;
+
+function highlightMatch(name, term){
+  const t = norm(term), nn = norm(name);
+  const i = nn.indexOf(t);
+  if(i < 0 || !t) return name;
+  return name.slice(0,i) + "<b>" + name.slice(i, i+term.length) + "</b>" + name.slice(i+term.length);
+}
+function showSug(list, term){
+  sugList = list; sugActive = -1;
+  if(list.length === 0){
+    sug.innerHTML = `<div class="sug-empty">Sin coincidencias</div>`;
+    sug.classList.add("show"); return;
+  }
+  const t = norm(term);
+  sug.innerHTML = "";
+  list.forEach((d, i) => {
+    const brand = d.a.find(a => norm(a).includes(t) && norm(a) !== norm(d.n));
+    const el = document.createElement("div");
+    el.className = "sug-item"; el.dataset.i = i;
+    el.innerHTML = `<span class="sug-dot ${d.nivel}"></span><span class="sug-name">${highlightMatch(d.n, term)}</span>` +
+                   (brand ? `<span class="sug-brand">${brand}</span>` : "");
+    el.addEventListener("mousedown", e => { e.preventDefault(); commit(d); });
+    sug.appendChild(el);
+  });
+  sug.classList.add("show");
+}
+function hideSug(){ sug.classList.remove("show"); sugActive = -1; }
+function setActive(i){
+  const items = sug.querySelectorAll(".sug-item");
+  if(items.length === 0) return;
+  sugActive = (i + items.length) % items.length;
+  items.forEach((el, k) => el.classList.toggle("active", k === sugActive));
+  items[sugActive].scrollIntoView({block:"nearest"});
+}
+function commit(d){
+  q.value = d.n; clearBtn.classList.add("show");
+  hideSug(); renderCards([d]);
+}
+
 function update(){
   const term = q.value;
   clearBtn.classList.toggle("show", term.length > 0);
-  results.innerHTML = "";
-
-  if(!term.trim()){
-    results.innerHTML = `<div class="msg"><div class="big">Buscá tu remedio 👆</div>Escribí el nombre y te digo si conviene o no combinarlo con alcohol. Probá con uno de los ejemplos de arriba.</div>`;
-    return;
-  }
-
-  const found = search(term);
-  if(found.length === 0){
-    results.innerHTML = `<div class="msg"><div class="big">No lo encontré 🤔</div>Revisá cómo se escribe o probá con el <strong>nombre genérico</strong> (el de la droga, no la marca).<br><br>Que no esté en la lista <strong>no significa que sea seguro</strong>. Consultá a tu farmacéutico/a.</div>`;
-    return;
-  }
-
-  const c = document.createElement("div");
-  c.className = "count";
-  c.textContent = found.length === 1 ? "1 resultado" : found.length + " resultados";
-  results.appendChild(c);
-  found.forEach(d => results.appendChild(card(d)));
+  if(!term.trim()){ hideSug(); emptyPrompt(); return; }
+  const list = search(term);
+  if(list.length === 0){ hideSug(); notFoundMsg(); return; }
+  const t = norm(term);
+  const exact = list.find(d => d._keys.includes(t));
+  if(exact){ hideSug(); renderCards(list); }
+  else { showSug(list, term); emptyPrompt(); }
 }
 
 q.addEventListener("input", update);
-clearBtn.addEventListener("click", () => { q.value=""; q.focus(); update(); });
-update();
+q.addEventListener("keydown", e => {
+  if(!sug.classList.contains("show")) return;
+  if(e.key === "ArrowDown"){ e.preventDefault(); setActive(sugActive + 1); }
+  else if(e.key === "ArrowUp"){ e.preventDefault(); setActive(sugActive - 1); }
+  else if(e.key === "Enter"){ if(sugList.length){ e.preventDefault(); commit(sugList[sugActive >= 0 ? sugActive : 0]); } }
+  else if(e.key === "Escape"){ hideSug(); }
+});
+q.addEventListener("focus", () => { if(q.value.trim()) update(); });
+document.addEventListener("click", e => { if(!e.target.closest(".search")) hideSug(); });
+clearBtn.addEventListener("click", () => { q.value=""; q.focus(); hideSug(); emptyPrompt(); clearBtn.classList.remove("show"); });
+emptyPrompt();
 </script>
 </body>
 </html>
