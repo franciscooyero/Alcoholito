@@ -182,7 +182,82 @@
   .ar-mark .malvinas{width:34px; height:auto; display:block;
     filter:drop-shadow(0 1px 1px rgba(60,45,20,.18));}
 
+
+  /* ---------- Recent ---------- */
+  .recent{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:12px;}
+  .recent-label{font-size:13px;color:var(--muted);font-weight:600;}
+  .recent-chip{border-style:dashed;}
+  /* ---------- Categories ---------- */
+  .cats{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;margin-top:16px;}
+  .cats-label{width:100%;text-align:center;font-size:13px;color:var(--muted);font-weight:600;margin-bottom:2px;}
+  .cat-btn{border:1px solid var(--border-strong);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 13px;font-size:13.5px;font-weight:500;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px;transition:border-color .15s,background .15s;}
+  .cat-btn:hover{border-color:var(--amber);background:#FFF9EC;}
+  .cat-btn.active{background:var(--amber);border-color:var(--amber);color:#fff;}
+  .cat-n{background:rgba(0,0,0,.06);border-radius:999px;padding:1px 7px;font-size:11.5px;font-weight:700;}
+  .cat-btn.active .cat-n{background:rgba(255,255,255,.25);color:#fff;}
+  .cat-head{display:flex;justify-content:space-between;align-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:16px;padding:2px 2px 10px;color:var(--ink);}
+  .cat-close{border:none;background:#EFE7D4;color:var(--muted);border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;font-family:inherit;font-weight:600;}
+  .cat-close:hover{background:#E4D9BF;}
+  .cat-list{display:flex;flex-direction:column;gap:8px;}
+  .cat-item{display:flex;align-items:center;gap:10px;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:11px 14px;cursor:pointer;font-family:inherit;box-shadow:var(--shadow);}
+  .cat-item:hover{border-color:var(--amber);background:#FFF9EC;}
+  .ci-name{font-size:15px;font-weight:600;color:var(--ink);}
+  .ci-grp{margin-left:auto;font-size:12px;color:#9A8F77;text-align:right;max-width:46%;}
+  /* ---------- Multi-check banner ---------- */
+  .multi-banner{border-radius:var(--radius);padding:16px 18px;margin-bottom:6px;border:1px solid var(--border);box-shadow:var(--shadow);}
+  .multi-banner.grave{background:var(--rojo-bg);border-left:6px solid var(--rojo);}
+  .multi-banner.moderado{background:var(--naranja-bg);border-left:6px solid var(--naranja);}
+  .multi-banner.leve{background:var(--amarillo-bg);border-left:6px solid var(--amarillo);}
+  .multi-banner.seguro{background:var(--verde-bg);border-left:6px solid var(--verde);}
+  .mb-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .mb-title{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;color:var(--ink);}
+  .mb-note{margin-top:10px;font-size:13.5px;color:#3D372C;line-height:1.5;}
+
+
+  /* ---------- Fuente / bibliografía ---------- */
+  .fuente{margin-top:13px;font-size:11.5px;color:#9A8F77;line-height:1.55;border-top:1px dashed var(--border);padding-top:9px;}
+  .biblio{margin-top:20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:2px 18px;box-shadow:var(--shadow);}
+  .biblio summary{cursor:pointer;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14px;color:var(--ink);padding:13px 0;list-style:none;}
+  .biblio summary::-webkit-details-marker{display:none;}
+  .biblio p{font-size:12.5px;color:var(--muted);margin:8px 0;line-height:1.55;}
+  .biblio ul{font-size:12.5px;color:var(--muted);padding-left:18px;margin:8px 0;}
+  .biblio li{margin:8px 0;line-height:1.55;}
+  .biblio strong{color:#3D372C;}
+
+
+  /* ---------- Info FAB + modal ---------- */
+  .info-fab{position:fixed;right:16px;bottom:16px;z-index:70;display:inline-flex;align-items:center;gap:8px;background:var(--surface);color:var(--ink);border:1.5px solid var(--border-strong);border-radius:999px;padding:10px 16px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;box-shadow:var(--shadow);transition:border-color .15s,background .15s;}
+  .info-fab:hover{border-color:var(--amber);background:#FFF9EC;}
+  .info-fab svg{color:var(--amber-deep);}
+  .info-overlay{position:fixed;inset:0;z-index:80;background:rgba(35,32,26,.5);display:flex;align-items:center;justify-content:center;padding:20px;}
+  .info-overlay[hidden]{display:none;}
+  .info-modal{background:var(--surface);border-radius:20px;max-width:520px;width:100%;padding:28px 26px 22px;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative;max-height:86vh;overflow-y:auto;animation:rise .28s cubic-bezier(.2,.7,.3,1) both;}
+  .info-close{position:absolute;top:13px;right:13px;border:none;background:#EFE7D4;color:var(--muted);width:34px;height:34px;border-radius:50%;font-size:20px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;}
+  .info-close:hover{background:#E4D9BF;}
+  .info-modal h2{font-family:"Bricolage Grotesque",sans-serif;font-size:23px;margin:0 0 4px;letter-spacing:-.02em;color:var(--ink);padding-right:30px;}
+  .info-modal h3{font-family:"Bricolage Grotesque",sans-serif;font-size:14.5px;margin:18px 0 8px;color:var(--ink);}
+  .info-modal p{font-size:14.5px;color:#3D372C;line-height:1.6;margin:8px 0;}
+  .info-modal ul{font-size:14px;color:var(--muted);padding-left:18px;margin:8px 0;}
+  .info-modal li{margin:9px 0;line-height:1.55;}
+  .info-modal strong{color:var(--ink);}
+  .info-foot{font-size:12.5px;color:var(--muted);border-top:1px solid var(--border);padding-top:14px;margin-top:16px;}
+  @media (max-width:400px){ .info-fab .fab-label{display:none;} .info-fab{padding:11px;} }
+
 </style>
+<meta name="description" content="¿Tu medicación se lleva bien con el alcohol? Consultá al toque si tu remedio tiene interacción, con semáforo de riesgo y marcas argentinas.">
+<meta name="theme-color" content="#E39A2B">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="alcoholito">
+<meta property="og:title" content="alcoholito · ¿tu remedio se lleva bien con el alcohol?">
+<meta property="og:description" content="Buscá tu medicación y fijate al toque si tiene interacción con el alcohol. Semáforo de riesgo y marcas argentinas.">
+<meta property="og:url" content="https://alcoholito.com.ar">
+<meta property="og:image" content="https://alcoholito.com.ar/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="alcoholito · ¿tu remedio se lleva bien con el alcohol?">
+<meta name="twitter:description" content="Buscá tu medicación y fijate al toque si tiene interacción con el alcohol.">
+<meta name="twitter:image" content="https://alcoholito.com.ar/og.png">
 </head>
 <body>
 <div class="wrap">
@@ -199,7 +274,9 @@
   </div>
   <p class="hint">Podés buscar por nombre genérico (metronidazol) o comercial (flagyl).</p>
 
-  <div class="chips" id="chips"></div>
+    <div class="chips" id="chips"></div>
+  <div class="recent" id="recent"></div>
+  <div class="cats" id="catbar"></div>
 
   <div id="results"></div>
 
@@ -357,6 +434,23 @@ fill="#74ACDF" stroke="none">
   </footer>
 </div>
 
+<button class="info-fab" id="infoFab" type="button" aria-label="Información">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
+  <span class="fab-label">Información</span>
+</button>
+<div class="info-overlay" id="infoOverlay" hidden>
+  <div class="info-modal" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+    <button class="info-close" id="infoClose" aria-label="Cerrar">×</button>
+    <h2 id="infoTitle">Sobre alcoholito</h2>
+    <p><strong>alcoholito</strong> es una herramienta <strong>sin fines de lucro</strong>, pensada para concientizar y ayudar a tomar decisiones informadas sobre combinar medicación con alcohol.</p>
+    <h3>De dónde sale la información</h3>
+    <ul>
+      <li><strong>Libros de texto:</strong> <em>Goodman &amp; Gilman. Las Bases Farmacológicas de la Terapéutica</em> (14.ª ed.) y <em>Velázquez. Farmacología Básica y Clínica</em> (19.ª ed.) — mecanismos e interacciones, citados puntualmente en cada ficha.</li>
+      <li><strong>ANMAT, vademécum argentino y alfabeta.net</strong> — nombres comerciales vigentes en Argentina.</li>
+    </ul>
+    <p class="info-foot">Es una herramienta orientativa de información general; no reemplaza el consejo de tu médico/a ni de tu farmacéutico/a. Ante la duda, consultá a un profesional.</p>
+  </div>
+</div>
 <script>
 /* ================== BASE DE DATOS ================== */
 const DB = [
@@ -626,9 +720,54 @@ function search(term){
   return [...starts, ...contains].slice(0, 8);
 }
 
+const GG = "Goodman & Gilman, Bases Farmacológicas de la Terapéutica, 14.ª ed.";
+const VZ = "Velázquez, Farmacología Básica y Clínica, 19.ª ed.";
+function fuente(d){
+  const t = norm(d.tipo), m = norm(d.mec), n = norm(d.n), g = norm(d.g);
+  if(t.includes("disulfiram") || m.includes("acetaldeh") || m.includes("aldehido deshidrogenasa"))
+    return GG + " — Etanol (cap. 27): el fármaco inhibe la aldehído deshidrogenasa y acumula acetaldehído (rubor, cefalea, náuseas, hipotensión). El libro describe la reacción tipo disulfiram del metronidazol con alcohol durante el tratamiento y hasta 3 días después.";
+  if(t.includes("tiramina"))
+    return GG + " — IMAO: los inhibidores no selectivos aumentan la biodisponibilidad de la tiramina de quesos, vino tinto y cerveza (fermentados), y pueden desencadenar una crisis hipertensiva. Menor riesgo con moclobemida (reversible) y selegilina (MAO-B).";
+  if(n.indexOf("paracetamol") === 0 || m.includes("cyp2e1") || m.includes("napqi"))
+    return GG + " — Paracetamol: se metaboliza por CYP2E1 al metabolito tóxico NAPQI; el alcohol crónico induce el CYP2E1 y aumenta la hepatotoxicidad (igual que la isoniazida).";
+  if(n.includes("abacavir"))
+    return GG + " — Antirretrovirales: una dosis alta de etanol aumenta ~41% el área bajo la curva del abacavir y prolonga su semivida, por competir con la alcohol deshidrogenasa.";
+  if(t.includes("etretinato"))
+    return GG + " — Retinoides: combinada con etanol, la acitretina se esterifica a etretinato, de semivida muy larga (80–160 días) y teratogénico; de ahí la necesidad de anticoncepción prolongada.";
+  if(t.includes("acidosis lactica"))
+    return GG + " — Etanol (cap. 27): favorece la acumulación de cuerpos cetónicos y agrava la acidosis láctica; sumado a la metformina (biguanida) eleva ese riesgo.";
+  if(t.includes("hipoglucemia"))
+    return GG + " — El etanol potencia la hipoglucemia de las sulfonilureas (desplaza al fármaco de sus proteínas transportadoras) y, en ayunas, la de la insulina.";
+  if(t.includes("acido urico") || m.includes("acido urico") || m.includes("uratos"))
+    return GG + " — La intoxicación por alcohol aumenta la reabsorción de uratos (vía URAT-1) y eleva el ácido úrico, en contra del tratamiento de la gota.";
+  if(t.includes("niveles"))
+    return GG + " — Etanol y fenitoína compiten por un metabolismo saturable (cinética de orden cero): el consumo agudo puede elevar los niveles de fenitoína.";
+  if(t.includes("coagulacion"))
+    return GG + " — El etanol altera el metabolismo de la warfarina (competencia en el consumo agudo; inducción enzimática en el crónico), desestabilizando la anticoagulación.";
+  if(t.includes("sangrado") || t.includes("gastritis"))
+    return GG + " — Etanol (cap. 27): mayor riesgo de hemorragia interna al combinarse con ácido acetilsalicílico y otros AINE (y con anticoagulantes/antiagregantes).";
+  if(t.includes("hipotension"))
+    return GG + " — Nitratos e inhibidores de la PDE5 son vasodilatadores: sumados entre sí o con alcohol potencian la hipotensión (PDE5 + nitratos está contraindicado por hipotensión extrema).";
+  if(t.includes("nervioso") || (t.includes("snc") && (d.nivel === "grave" || d.nivel === "moderado")))
+    return GG + " — Etanol (cap. 27) como depresor del SNC: efecto aditivo con benzodiacepinas, opioides y barbitúricos; la mayoría de las muertes por benzodiacepinas ocurren cuando se suma otro depresor, más a menudo el alcohol.";
+  if(t.includes("hepatotox"))
+    return GG + " — Hepatotoxicidad potenciada por el consumo de alcohol (efecto aditivo sobre el hígado).";
+  if(n.includes("litio"))
+    return VZ + " — El litio se reabsorbe en el túbulo proximal por el mismo transportador que el sodio (ENaC); la deshidratación o la pérdida de sodio (p. ej., por diuresis) aumentan su reabsorción y pueden llevar a toxicidad.";
+  if(n.includes("prednisona") || n.includes("dexametasona"))
+    return VZ + " — Los glucocorticoides aumentan la secreción ácida gástrica y el riesgo de úlcera; el alcohol, también irritante de la mucosa, suma ese riesgo.";
+  if(n.includes("doxiciclina"))
+    return VZ + " — Los inductores del metabolismo hepático aceleran la eliminación de las tetraciclinas y reducen su actividad; el alcohol crónico actúa como inductor.";
+  if(g.includes("fluoroquinolona"))
+    return VZ + " — La toxicidad de las fluoroquinolonas sobre el SNC es infrecuente; con alcohol puede sumarse algo de mareo o somnolencia.";
+  if(n.includes("fexofenadina") || n.includes("loratadina") || n.includes("cetirizina"))
+    return VZ + " — Los antihistamínicos H1 de segunda generación penetran poco en el SNC (poco sedantes): la fexofenadina prácticamente no seda y la levocetirizina seda menos que la cetirizina.";
+  return "";
+}
 function card(d){
   const el = document.createElement("div");
   el.className = "card " + d.nivel;
+  const src = fuente(d);
   el.innerHTML = `
     <div class="card-top">
       <div>
@@ -641,6 +780,7 @@ function card(d){
     <div class="tipo">${d.tipo}</div>
     <div class="row"><span class="k">Por qué</span><span class="v mecanismo">${d.mec}</span></div>
     <div class="row"><span class="k">Qué hacer</span><span class="v">${d.que}</span></div>
+    ${src ? `<div class="fuente">${src}</div>` : ""}
   `;
   return el;
 }
@@ -654,10 +794,116 @@ function renderCards(list){
   list.forEach(d => results.appendChild(card(d)));
 }
 function emptyPrompt(){
-  results.innerHTML = `<div class="msg"><div class="big">Buscá tu remedio 👆</div>Escribí el nombre y te digo si conviene o no combinarlo con alcohol. Probá con uno de los ejemplos de arriba.</div>`;
+  results.innerHTML = `<div class="msg"><div class="big">Buscá tu remedio 👆</div>Escribí el nombre (o varios separados por coma) y te digo si conviene o no combinarlo con alcohol.</div>`;
 }
 function notFoundMsg(){
   results.innerHTML = `<div class="msg"><div class="big">No lo encontré 🤔</div>Revisá cómo se escribe o probá con el <strong>nombre genérico</strong> (el de la droga, no la marca).<br><br>Que no esté en la lista <strong>no significa que sea seguro</strong>. Consultá a tu farmacéutico/a.</div>`;
+}
+
+const RANK = {grave:3, moderado:2, leve:1, seguro:0};
+
+/* ---- búsquedas recientes ---- */
+const RECENT_KEY = "alcoholito_recent";
+let recentMem = [];
+function readRecent(){ try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); } catch(e){ return recentMem; } }
+function saveRecent(name){
+  let r = readRecent().filter(x => x !== name);
+  r.unshift(name); r = r.slice(0, 8); recentMem = r;
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(r)); } catch(e){}
+  renderRecent();
+}
+function renderRecent(){
+  const box = document.getElementById("recent");
+  const r = readRecent();
+  if(!r.length){ box.style.display = "none"; box.innerHTML = ""; return; }
+  box.style.display = ""; box.innerHTML = '<span class="recent-label">Recientes:</span>';
+  r.forEach(name => {
+    const b = document.createElement("button");
+    b.className = "chip recent-chip"; b.textContent = name;
+    b.onclick = () => { q.value = name; update(); };
+    box.appendChild(b);
+  });
+}
+
+/* ---- categorías ---- */
+function catOf(d){
+  const g = norm(d.g);
+  const rules = [
+    ["Piel y tópicos", /(topic|crema|\bgel|antisept|laca|hidratante|pasta protectora|reparador|lagrimas|retinoide|vitamina a)/],
+    ["Alergia y respiratorio", /(antihistam|broncodilat|inhalad|mucolit|expectorante|antitusivo|descongest|nasal)/],
+    ["Antibióticos", /(antibi|cefalospor|fluoroquinolona|macrolid|penicilina|sulfonamida|lincosamida|nitrofuran|nitroimidazol|antitubercul)/],
+    ["Antivirales, hongos y parásitos", /(antiviral|antirretroviral|antiparasit|antifung)/],
+    ["Analgésicos y antiinflamatorios", /(aine|analges|antiinflam|antiterm|opioide|gota)/],
+    ["Psicofármacos y neurología", /(benzodiac|antidepres|antipsicot|imao|hipnot|estabilizador|anticonvuls|neuropat|relajante|barbitur)/],
+    ["Cardiovascular", /(antihipertens|nitrato|anticoagul|antiagreg|estatina|antiarritm|vasodilat|venoton)/],
+    ["Diabetes y hormonal", /(antidiab|insulina|sulfonilurea|biguanida|tiroide|anticoncep|corticoide)/],
+    ["Digestivo", /(antiacid|ibp|protector gastr|antiespasm|antidiarr|laxante|antiflatul|regulador intestinal|rehidrat)/],
+  ];
+  for(const [name, re] of rules){ if(re.test(g)) return name; }
+  return "Otros";
+}
+let currentCat = null;
+function buildCatBar(){
+  const counts = {};
+  DB.forEach(d => { const c = catOf(d); counts[c] = (counts[c]||0)+1; });
+  const order = ["Analgésicos y antiinflamatorios","Antibióticos","Antivirales, hongos y parásitos","Psicofármacos y neurología","Cardiovascular","Diabetes y hormonal","Digestivo","Alergia y respiratorio","Piel y tópicos","Otros"];
+  const box = document.getElementById("catbar");
+  box.innerHTML = '<span class="cats-label">Explorá por categoría:</span>';
+  order.forEach(c => {
+    if(!counts[c]) return;
+    const b = document.createElement("button");
+    b.className = "cat-btn"; b.dataset.cat = c;
+    b.innerHTML = `${c} <span class="cat-n">${counts[c]}</span>`;
+    b.onclick = () => toggleCat(c);
+    box.appendChild(b);
+  });
+}
+function clearCatActive(){ document.querySelectorAll(".cat-btn").forEach(x => x.classList.remove("active")); }
+function toggleCat(c){
+  if(currentCat === c){ currentCat = null; clearCatActive(); q.value=""; clearBtn.classList.remove("show"); emptyPrompt(); return; }
+  currentCat = c;
+  document.querySelectorAll(".cat-btn").forEach(x => x.classList.toggle("active", x.dataset.cat === c));
+  q.value=""; clearBtn.classList.remove("show"); hideSug();
+  renderCategory(c);
+}
+function renderCategory(c){
+  const list = DB.filter(d => catOf(d) === c).sort((a,b) => a.n.localeCompare(b.n, 'es'));
+  results.innerHTML = "";
+  const head = document.createElement("div");
+  head.className = "cat-head";
+  head.innerHTML = `<span>${c} · ${list.length}</span>`;
+  const close = document.createElement("button");
+  close.className = "cat-close"; close.type = "button"; close.textContent = "✕ cerrar";
+  close.onclick = () => { currentCat = null; clearCatActive(); emptyPrompt(); };
+  head.appendChild(close);
+  results.appendChild(head);
+  const wrap = document.createElement("div"); wrap.className = "cat-list";
+  list.forEach(d => {
+    const el = document.createElement("button");
+    el.className = "cat-item"; el.type = "button";
+    el.innerHTML = `<span class="sug-dot ${d.nivel}"></span><span class="ci-name">${d.n}</span><span class="ci-grp">${d.g}</span>`;
+    el.onclick = () => { currentCat = null; clearCatActive(); commit(d); window.scrollTo({top:0, behavior:'smooth'}); };
+    wrap.appendChild(el);
+  });
+  results.appendChild(wrap);
+}
+
+/* ---- chequeo de varios ---- */
+function renderMulti(list){
+  results.innerHTML = "";
+  if(list.length === 0){ notFoundMsg(); return; }
+  if(list.length === 1){ renderCards(list); return; }
+  const worst = list.reduce((w,d) => RANK[d.nivel] > RANK[w] ? d.nivel : w, "seguro");
+  const cns = list.filter(d => norm(d.tipo).includes("nervioso")).length;
+  const hep = list.filter(d => norm(d.tipo).includes("hepatotox")).length;
+  let note = "";
+  if(cns >= 2) note = "Ojo: combinar varios depresores del sistema nervioso (más el alcohol) multiplica la sedación y el riesgo respiratorio.";
+  else if(hep >= 2) note = "Ojo: varios de estos cargan el hígado; junto con el alcohol el riesgo hepático se suma.";
+  const banner = document.createElement("div");
+  banner.className = "multi-banner " + worst;
+  banner.innerHTML = `<div class="mb-top"><span class="pill ${worst}"><span class="dot"></span>${NIVEL_LABEL[worst]}</span><span class="mb-title">Combinás ${list.length} remedios · guiate por el de mayor riesgo</span></div>` + (note ? `<div class="mb-note">${note}</div>` : "");
+  results.appendChild(banner);
+  list.forEach(d => results.appendChild(card(d)));
 }
 
 /* ---- buscador predictivo ---- */
@@ -700,18 +946,34 @@ function setActive(i){
 }
 function commit(d){
   q.value = d.n; clearBtn.classList.add("show");
-  hideSug(); renderCards([d]);
+  hideSug(); renderCards([d]); saveRecent(d.n);
 }
 
 function update(){
   const term = q.value;
   clearBtn.classList.toggle("show", term.length > 0);
+  if(term.trim() && currentCat){ currentCat = null; clearCatActive(); }
   if(!term.trim()){ hideSug(); emptyPrompt(); return; }
+  if(term.includes(",")){
+    hideSug();
+    const parts = term.split(",").map(s => s.trim()).filter(Boolean);
+    const found = []; const seen = new Set();
+    parts.forEach(p => {
+      const m = search(p);
+      if(m.length){
+        const t = norm(p);
+        const d = m.find(x => x._keys.includes(t)) || m[0];
+        if(!seen.has(d.n)){ seen.add(d.n); found.push(d); }
+      }
+    });
+    renderMulti(found);
+    return;
+  }
   const list = search(term);
   if(list.length === 0){ hideSug(); notFoundMsg(); return; }
   const t = norm(term);
   const exact = list.find(d => d._keys.includes(t));
-  if(exact){ hideSug(); renderCards(list); }
+  if(exact){ hideSug(); renderCards(list); saveRecent(exact.n); }
   else { showSug(list, term); emptyPrompt(); }
 }
 
@@ -725,8 +987,20 @@ q.addEventListener("keydown", e => {
 });
 q.addEventListener("focus", () => { if(q.value.trim()) update(); });
 document.addEventListener("click", e => { if(!e.target.closest(".search")) hideSug(); });
-clearBtn.addEventListener("click", () => { q.value=""; q.focus(); hideSug(); emptyPrompt(); clearBtn.classList.remove("show"); });
+clearBtn.addEventListener("click", () => { q.value=""; q.focus(); hideSug(); currentCat=null; clearCatActive(); emptyPrompt(); clearBtn.classList.remove("show"); });
+
+buildCatBar();
+renderRecent();
 emptyPrompt();
+const infoFab = document.getElementById("infoFab");
+const infoOverlay = document.getElementById("infoOverlay");
+const infoClose = document.getElementById("infoClose");
+if(infoFab){
+  infoFab.addEventListener("click", () => { infoOverlay.hidden = false; });
+  infoClose.addEventListener("click", () => { infoOverlay.hidden = true; });
+  infoOverlay.addEventListener("click", e => { if(e.target === infoOverlay) infoOverlay.hidden = true; });
+  document.addEventListener("keydown", e => { if(e.key === "Escape") infoOverlay.hidden = true; });
+}
 </script>
 </body>
 </html>
