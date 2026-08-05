@@ -447,8 +447,9 @@ fill="#74ACDF" stroke="none">
     <p><strong>alcoholito</strong> es una herramienta <strong>sin fines de lucro</strong>, pensada para concientizar y ayudar a tomar decisiones informadas sobre combinar medicación con alcohol.</p>
     <h3>De dónde sale la información</h3>
     <ul>
-      <li><strong>Libros de texto:</strong> <em>Goodman &amp; Gilman. Las Bases Farmacológicas de la Terapéutica</em> (14.ª ed.) y <em>Velázquez. Farmacología Básica y Clínica</em> (19.ª ed.) — mecanismos e interacciones, citados puntualmente en cada ficha.</li>
-      <li><strong>ANMAT, vademécum argentino y alfabeta.net</strong> — nombres comerciales vigentes en Argentina.</li>
+      <li><strong>Libros de texto:</strong> <em>Goodman &amp; Gilman</em> (14.ª ed.), <em>Velázquez</em> (19.ª ed.), <em>Katzung</em> (16.ª ed.) y <em>Rang &amp; Dale</em> (10.ª ed.) — mecanismos e interacciones, citados en cada ficha.</li>
+      <li><strong>Registros y agencias regulatorias:</strong> FDA, ANMAT, DailyMed, British National Formulary (BNF), Agencia Europea de Medicamentos (EMA) y drugs.com.</li>
+      <li><strong>Nombres comerciales (Argentina):</strong> vademécum argentino y alfabeta.net.</li>
     </ul>
     <p class="info-foot">Es una herramienta orientativa de información general; no reemplaza el consejo de tu médico/a ni de tu farmacéutico/a. Ante la duda, consultá a un profesional.</p>
   </div>
@@ -724,6 +725,7 @@ function search(term){
 
 const GG = "Goodman & Gilman, Bases Farmacológicas de la Terapéutica, 14.ª ed.";
 const VZ = "Velázquez, Farmacología Básica y Clínica, 19.ª ed.";
+const RD = "Rang & Dale, Farmacología, 10.ª ed.";
 function fuente(d){
   const t = norm(d.tipo), m = norm(d.mec), n = norm(d.n), g = norm(d.g);
   if(t.includes("disulfiram") || m.includes("acetaldeh") || m.includes("aldehido deshidrogenasa"))
@@ -751,7 +753,7 @@ function fuente(d){
   if(t.includes("hipotension"))
     return GG + " — Nitratos e inhibidores de la PDE5 son vasodilatadores: sumados entre sí o con alcohol potencian la hipotensión (PDE5 + nitratos está contraindicado por hipotensión extrema).";
   if(t.includes("nervioso") || (t.includes("snc") && (d.nivel === "grave" || d.nivel === "moderado")))
-    return GG + " — Etanol (cap. 27) como depresor del SNC: efecto aditivo con benzodiacepinas, opioides y barbitúricos; la mayoría de las muertes por benzodiacepinas ocurren cuando se suma otro depresor, más a menudo el alcohol.";
+    return GG + " — Etanol (cap. 27) como depresor del SNC: efecto aditivo con benzodiacepinas, opioides y barbitúricos. Katzung (16.ª ed.) también documenta la depresión aditiva del SNC con etanol; la mayoría de las muertes por benzodiacepinas ocurren cuando se suma otro depresor, más a menudo el alcohol.";
   if(t.includes("hepatotox"))
     return GG + " — Hepatotoxicidad potenciada por el consumo de alcohol (efecto aditivo sobre el hígado).";
   if(n.includes("litio"))
@@ -764,6 +766,8 @@ function fuente(d){
     return VZ + " — La toxicidad de las fluoroquinolonas sobre el SNC es infrecuente; con alcohol puede sumarse algo de mareo o somnolencia.";
   if(n.includes("fexofenadina") || n.includes("loratadina") || n.includes("cetirizina"))
     return VZ + " — Los antihistamínicos H1 de segunda generación penetran poco en el SNC (poco sedantes): la fexofenadina prácticamente no seda y la levocetirizina seda menos que la cetirizina.";
+  if(g.includes("antidepresivo") && !g.includes("imao"))
+    return RD + " — Los ISRS/IRSN son poco sedantes: la interacción con alcohol es leve (puede sumar algo de somnolencia), pero el alcohol empeora el cuadro depresivo y ansioso.";
   return "";
 }
 function card(d){
