@@ -393,7 +393,7 @@ function update(){
 
   const c = document.createElement("div");
   c.className = "count";
-  c.textContent = found.length === 1 ? "1 resultado" : found.length + " resultados";
+  c.textContent = found.length === 1 ? "1 resultado" : found.length + " resultados ";
   results.appendChild(c);
   found.forEach(d => results.appendChild(card(d)));
 }
